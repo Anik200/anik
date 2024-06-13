@@ -3,38 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Modern Website</title>
+<title>Anik's Website</title>
+
 <style>
     /* Basic Styling */
     body {
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #f0f0f0;
+        background-color: #181825;
     }
     .container {
         max-width: 800px;
         margin: 50px auto;
         padding: 20px;
-        background-color: #fff;
+        background-color: #1E1E2E;
         border-radius: 8px;
         box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
     }
     h1 {
-        color: #333;
+        color: #C8A4F4;
+        font-family: Hack;
         text-align: center;
     }
-    .button {
-        display: inline-block;
-        padding: 10px 20px;
-        margin: 10px;
-        border: none;
-        border-radius: 5px;
-        background-color: #4CAF50;
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
     }
     .button:hover {
         background-color: #45a049;
@@ -42,38 +33,80 @@
     }
     /* Animation */
     .bar {
-        width: 100%;
-        height: 30px;
-        background-color: #ddd;
-        margin: 10px 0;
+        width: 90%;
+        height: 50px;
+        background-color: #1E1E2E;
+        margin: 10px 5px;
         position: relative;
-        overflow: hidden;
+        overflow: show;
     }
     .bar::before {
         content: '';
         position: absolute;
         width: 100%;
         height: 100%;
-        background: linear-gradient(to right, #4CAF50, #45a049);
-        top: 0;
-        left: -100%;
+        background: #161320;
+        left: -0%;
         transition: all 0.5s ease;
+        border: 2px;
+        border-radius: 50px;
+        border-color: #161320;
     }
     .bar:hover::before {
-        left: 100%;
+        left: 6%;
+    }
+    /* Text inside bars */
+    .bar-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        z-index: 1; /* Ensure text is above the line */
+    }
+    .bar-text::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 4px;
+    background-color: #45a049;
+    border-radius: 9px;
+    bottom: -6px; /* Adjust this value to position the line */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.bat-text::hover{
+left: -50%;
+}
+.bar:hover .bar-text::after {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2); /* Adjust scale as needed */
+}
+
+    }
+    .bar:hover .bar-text::after {
+        opacity: 1;
     }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Modern Website</h1>
-    <button class="button">Hover Me</button>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
+    <h1>Anik's Website</h1>
+    <div class="bar">
+        <div class="bar-text">Text 1</div>
+    </div>
+    <div class="bar">
+        <div class="bar-text">Text 2</div>
+    </div>
+    <div class="bar">
+        <div class="bar-text">Text 3</div>
+    </div>
 </div>
 
 </body>
 </html>
-
