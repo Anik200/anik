@@ -48,6 +48,22 @@
             font-family: hack;
              animation: typing 2s cubic-bezier(0.42, 0, 0.58, 1);
         }
+    /* Keyframes for cursor blinking */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Cursor style */
+#typing-heading::after {
+    content: '|'; /* Cursor symbol */
+    display: inline-block;
+    width: 0.15em; /* Adjust cursor width */
+    height: 1.1em; /* Adjust cursor height */
+    margin-left: 2px; /* Spacing between cursor and text */
+    background-color: #fff; /* Cursor color */
+    animation: blink 1s infinite; /* Blink animation */
+}
         
         
         body {
