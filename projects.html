@@ -198,7 +198,39 @@ pre code.cpp .string {
     </code></pre>
 </div>
 
+<div class="project">
+    <h2>Prime Number Checker</h2>
+    <p>This program checks if a number is prime.</p>
+    <pre><code>
+        <span class="keyword">#include</span>&lt;<span class="keyword">iostream</span>&gt;
+        <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="keyword">std</span>;
 
+        <span class="keyword">int</span> <span class="function">main</span>() 
+        {
+            <span class="keyword">int</span> n, i;
+            cout &lt;&lt; <span class="string">"Enter your number: "</span>;
+            cin &gt;&gt; n;
+            
+            <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) 
+            {
+                cout &lt;&lt; <span class="string">"The number is not prime."</span> &lt;&lt; endl;
+                <span class="keyword">return</span> <span class="number">0</span>;
+            }
+            
+            <span class="keyword">for</span> (i = <span class="number">2</span>; i &lt;= n/<span class="number">2</span>; i++) 
+            {
+                <span class="keyword">if</span> (n % i == <span class="number">0</span>) 
+                {
+                    cout &lt;&lt; <span class="string">"The number is not prime."</span> &lt;&lt; endl;
+                    <span class="keyword">return</span> <span class="number">0</span>;
+                }
+            }
+            
+            cout &lt;&lt; <span class="string">"The number is prime."</span> &lt;&lt; endl;
+            <span class="keyword">return</span> <span class="number">0</span>;
+        }
+    </code></pre>
+</div>
 
 <div class="outro-bar">
     <p>@Made By Anik Biswas</p>
