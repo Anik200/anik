@@ -208,3 +208,28 @@ footer {
   max-height: 500px; /* Adjust depending on your content */
   opacity: 1;
 }
+
+.headline {
+text-decoration: none;
+background: rgba(0, 0, 0, 0.0);
+backdrop-filter: blur(6px); 
+font-weight: bold;
+font-size: 25px;
+padding-left: 32px;
+padding-right: 23px;
+padding-bottom: 23px;
+padding-top: 23px;
+}
+
+.mug {
+color: white;
+font-size: 23px;
+}
+
+.dock-discord {
+color: white;
+font-size: 23px;
+}
+#dock-panel .dock-icon i {
+  color: white;
+}
