@@ -4,6 +4,24 @@ const toggleBtn = document.getElementById('theme-toggle');
 const body = document.body;
 const dockPanel = document.getElementById('dock-panel');
 
+// Apply theme based on system preference or stored choice
+function applyInitialTheme() {
+  const savedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  if (savedTheme) {
+    body.classList.add(savedTheme);
+  } else {
+    body.classList.add(prefersDark ? 'dark' : 'light');
+  }
+
+  toggleBtn.innerHTML = body.classList.contains('dark')
+    ? '<i class="fas fa-sun"></i>'
+    : '<i class="fas fa-moon"></i>';
+
+  updateGradient();
+}
+
 // Update background gradient based on current theme
 function updateGradient() {
   background.style.backgroundImage = body.classList.contains('dark')
@@ -13,11 +31,15 @@ function updateGradient() {
 
 // Toggle between light and dark themes
 function toggleTheme() {
-  body.classList.toggle('dark');
-  body.classList.toggle('light');
-  toggleBtn.innerHTML = body.classList.contains('dark')
-    ? '<i class="fas fa-sun"></i>'
-    : '<i class="fas fa-moon"></i>';
+  const isDark = body.classList.contains('dark');
+  body.classList.toggle('dark', !isDark);
+  body.classList.toggle('light', isDark);
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+
+  toggleBtn.innerHTML = isDark
+    ? '<i class="fas fa-moon"></i>'
+    : '<i class="fas fa-sun"></i>';
+
   updateGradient();
 }
 
@@ -28,18 +50,17 @@ function togglePost(postElement) {
   content.classList.toggle('visible');
 }
 
-// Run once DOM is ready
+// DOM ready
 window.addEventListener('DOMContentLoaded', () => {
-  updateGradient();
+  applyInitialTheme();
 
   // Animate dock panel entry
   dockPanel.classList.add('collapsed');
-  void dockPanel.offsetWidth; // Force reflow
+  void dockPanel.offsetWidth;
   setTimeout(() => {
     dockPanel.classList.remove('collapsed');
     dockPanel.classList.add('expanded');
   }, 100);
 });
 
-// Set up theme toggle button
 toggleBtn.addEventListener('click', toggleTheme);
