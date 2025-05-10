@@ -1,270 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anik's Website</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <link rel="icon" href="avatar.png" type="image/x-icon">
-    <!-- If you have a PNG version of your favicon, you can also include it -->
-    <link rel="icon" href="favicon.png" type="image/png">
-    <!-- Add more icon sizes for better compatibility with different devices -->
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Blog</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anik's Website</title>
+<body class="light">
+  <div id="background"></div>
 
-<style>
-// <uniquifier>: Use a unique and descriptive class name
-// <weight>: Use a value from 300 to 700
+  <!-- Floating Dock Panel -->
+  <div id="dock-panel" class="collapsed">
+    <span class="logo"><i class="fas fa-pen"></i></span>
+    <button id="theme-toggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
+  </div>
 
-.fira-code-<uniquifier> {
-  font-family: "Fira Code", monospace;
-  font-optical-sizing: auto;
-  font-weight: bold;
-  font-style: normal;
-}
-// <uniquifier>: Use a unique and descriptive class name
-// <weight>: Use a value from 100 to 700
-
-.roboto-mono-<uniquifier> {
-  font-family: "Roboto Mono", monospace;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-}
-
-    /* Basic Styling */
- /* Cursor animation */
-        @keyframes cursor {
-            0% { opacity: 0; }
-            50% { opacity: 0; }
-            100% { opacity: 0; }
-        }
-
-        #typing-cursor {
-            display: inline-block;
-            width: 0.15em; /* Adjust cursor width as needed */
-            height: 1.1em; /* Adjust cursor height as needed */
-            background-color: #fff; /* Adjust cursor color as needed */
-            animation: cursor 2s infinite;
-        }
-
-        /* Typing animation */
-        @keyframes typing {
-            0% { width: 0; transform: scaleX(0); }
-            100% { width: 100%; transform: scaleX(1); }
-        }
-
-        #typing-heading {
-            overflow: hidden;
-            white-space: nowrap;
-            margin: 0;
-            padding-right: 0.1em; /* Adjust padding to create space for the cursor */
-            font-family: hack;
-             animation: typing 2s cubic-bezier(0.42, 0, 0.58, 1);
-        }
-    /* Keyframes for cursor blinking */
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-/* Cursor style */
-#typing-heading::after {
-    content: ''; /* Cursor symbol */
-    display: inline-block;
-    width: 0.15em; /* Adjust cursor width */
-    height: 1.1em; /* Adjust cursor height */
-    margin-left: 2px; /* Spacing between cursor and text */
-    background-color: #fff; /* Cursor color */
-    animation: blink 1s infinite; /* Blink animation */
-}
-        
-        
-        body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #0F0F0F;
-}
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #0F0F0F;
-    border-radius: 8px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.0);
-}
-h1 {
-    color: #37df6f;
-    font-family: roboto mono;
-    text-align: center;
-    padding: 40px;
-}
-.button:hover {
-    background-color: #45a049;
-    transform: scale(1.1);
-}
-/* Animation */
-.bar {
-    width: 40%;
-    height: 90px;
-    font-family: fira code;
-    background-color: #0F0F0F;
-    margin: 55px 30%;
-    position: relative;
-    overflow: show;
-
-}
-.bar::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #1f3741;
-    left: -0%;
-    transition: all 0.5s ease;
-    border: 3px solid #668dfa;
-    border-radius: 20px;
-    
-}
-.bar:hover::before {
-    left: 6%;
-    box-shadow: 0 0 10px 5px rgba(110, 131, 247, 1);
-}
-/* Text inside bars */
-.bar-text {
-    content: 'lol';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    z-index: 1; /* Ensure text is above the line */    
-}
-.bar-text::after {
-    content: '';
-    position: absolute;
-    width: 30px;
-    height: 4px;
-    background-color: #45a049;
-    border-radius: 9px;
-    bottom: -6px; /* Adjust this value to position the line */
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.bar:hover .bar-text::after {
-    opacity: 1;
-    transform: translateX(-50%) scale(1.2); /* Adjust scale as needed */
-}
-.bar:hover {
-        
-        }
-.profile-image {
-    display: block;
-    max-width: 30%;
-    height: auto;
-    position: relative;
-    margin: 20px 30% 10px; /* Adjust margin as needed */
-    transition: transform 0.3s ease;
-}
-
-.profile-image:hover {
-    transform: scale(1.1); /* Adjust scale factor as needed */
-}
-
- /* Upper Panel */
-  .upper-panel {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 45px;
-            padding: 0px;
-            z-index: 9999;
-            background-color: rgba(22, 28, 39, 0.616); /* Transparent black */
-            backdrop-filter: blur(10px); /* Add blur effect */
-            color: #fff;
-            border: 1px solid #161320;
-        }
-
-.outro-bar {
-    position: bottom;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: background-color: rgba(17, 27, 39, 0.8);
-    padding: 0px;
-    border: 1px solid #151a31;
-    border-radius: 3px;
-    color: #fff;
-    text-align: center;
-    font-size: 16px;
-    backdrop-filter: blur(10px); /* Add blur effect */
-    
-}
-
-    .contact-email{
-        padding: 10px;
-        font-size: 8px;
-    }
-</style>
-</head>
-<body>
-
-<div class="upper-panel">
-        <a href="index.html">
-    <img src="home.png" style="height: 35px; width: 35px; padding-left: 10px; padding-top: 5px;" class="panel-icon">
-        
+  <header>
+    <div class="container">
+      <h1>Anik Biswas</h1>
+      <p class="tagline">My personal blog about tech, life, and thoughts.</p>
+      <nav>
+        <a href="#blog">Blog</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
+  </header>
+
+  <main class="container">
+    <section id="blog">
+      <h2>Latest Posts</h2>
+      <article class="post">
+        <h3><i class="fas fa-rocket"></i> Launching My Blog</h3>
+        <p class="date">May 10, 2025</p>
+        <p>Today I decided to finally start writing about my experiences with Linux, development, and personal projects...</p>
+      </article>
+  <article class="post"  onclick="togglePost(this)">
+    <h3><i class="fas fa-desktop"></i> My Hyprland Setup</h3>
+    <p class="date">May 8, 2025</p>
+    <p class="preview">I recently customized my Hyprland config and it's never felt better. Here's how I did it...</p>
+     <!-- Hidden expanded content -->
+  <p class="expanded-content" style="display: none;">
+    Here’s the detailed guide to my setup! I’ll explain how I modified my configuration files, what tools I used, and the steps to get everything working smoothly on my machine.
+  </p>
+  </article>
 </a>
-<div class="container">
-    <h1 id="typing-heading"><span>A</span><span>n</span><span>i</span><span>k</span><span>'</span><span>s</span><span>&nbsp;</span><span>W</span><span>e</span><span>b</span><span>s</span><span>i</span><span>t</span><span>e</span></span></h1>
-    <div
-    <p class="description" align="center" style="color: #3dd1eb; font-family: fira code; font-size: 18px; margin: auto;">I am a tech enthusiast and a Linux user. Welcome to my website where I share my experiences and projects!</p>
+    </section>
+
+    <section id="about">
+      <h2>About Me</h2>
+      <p>I'm a developer, Linux enthusiast, and lover of minimal aesthetics. This blog is a place for my ideas, setups, and occasional rants.</p>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>You can reach me at <a href="mailto:myhem@t-online.de">myhem@t-online.de</a> or on <a href="https://github.com/Anik200" target="_blank"><i class="fab fa-github"></i> GitHub</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 myhem. Built with <i class="fas fa-laptop-code"></i> and <i class="fas fa-mug-hot"></i>.</p>
     </div>
-    <a href="projects.html">
-        <div class="bar">
-            <div class="bar-text" align="center">My Projects</div>
-        </div>
-    <a href="index2.html">
-        <div class="bar">
-            <div class="bar-text" align="center">My Discord</div>
-    </div>
-</a>
-    <a href="https://github.com/Anik200/" target="_blank">
-    <div class="bar">
-        <div class="bar-text" align="center">My Github</div>
-    </div>
-    </a>
-    <a href="https://reddit.com/u/myhem_/" >
-    <div class="bar">
-        <div class="bar-text" align="center">My Reddit</div>
-    </div>
-    </a>
-    <h3 align=center class="description" style="color: #209DB3; font-family: fira code; margin: 70px ;"> Currently using void linux on hyprland.</h3>
-    <a href="https://voidlinux.org/" target="_blank">
-    <img src="void_bg.png" class="profile-image" alt="Profile Image" style=" margin: 10px auto;">
-    </a>
-</div>
-<div class="outro-bar">
-   <p>@Made By Anik Biswas</p>
-    <p class="contact-email">contact abbiswas2006@gmail.com</p>
-    
-</div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
