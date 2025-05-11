@@ -27,6 +27,27 @@ function togglePost(postElement) {
   if (!content) return;
   content.classList.toggle('visible');
 }
+// Function to apply theme based on system preference
+function setThemeBasedOnSystem() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  if (prefersDark) {
+    body.classList.add('dark');
+    body.classList.remove('light');
+    toggleBtn.innerHTML = '<i class="fas fa-sun"></i>'; // Set sun icon for dark theme
+  } else {
+    body.classList.add('light');
+    body.classList.remove('dark');
+    toggleBtn.innerHTML = '<i class="fas fa-moon"></i>'; // Set moon icon for light theme
+  }
+}
+
+// Listen for changes in system theme preference
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setThemeBasedOnSystem);
+
+// Set the theme when the page loads
+setThemeBasedOnSystem();
+
 
 // Run once DOM is ready
 window.addEventListener('DOMContentLoaded', () => {
