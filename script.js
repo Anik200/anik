@@ -25,8 +25,8 @@ function applyInitialTheme() {
 // Update background gradient based on current theme
 function updateGradient() {
   background.style.backgroundImage = body.classList.contains('dark')
-    ? "linear-gradient(135deg, #0C191F, #0C404F)"
-    : "linear-gradient(135deg, #55D9F6, #388297)";
+    ? "linear-gradient(135deg, #0C191F, #146d87)"
+    : "linear-gradient(135deg, #55D9F6, #0e3d4a)";
 }
 
 // Toggle between light and dark themes
