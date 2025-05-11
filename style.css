@@ -242,4 +242,5 @@ width: 130px;
 
 img:hover {
 width: 200px;
+transition: 1s ease;
 }
