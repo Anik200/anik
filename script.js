@@ -16,40 +16,21 @@ function toggleTheme() {
   body.classList.toggle('dark');
   body.classList.toggle('light');
   toggleBtn.innerHTML = body.classList.contains('dark')
-    ? '<i class="fas fa-sun"></i>'  // Change to sun icon for dark theme
-    : '<i class="fas fa-moon"></i>';  // Change to moon icon for light theme
+    ? '<i class="fas fa-sun"></i>'
+    : '<i class="fas fa-moon"></i>';
   updateGradient();
 }
 
-// Function to apply theme based on system preference
-function setThemeBasedOnSystem() {
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  
-  if (prefersDark) {
-    body.classList.add('dark');
-    body.classList.remove('light');
-    toggleBtn.innerHTML = '<i class="fas fa-sun"></i>'; // Set sun icon for dark theme
-  } else {
-    body.classList.add('light');
-    body.classList.remove('dark');
-    toggleBtn.innerHTML = '<i class="fas fa-moon"></i>'; // Set moon icon for light theme
-  }
-}
-
-// Listen for changes in system theme preference
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setThemeBasedOnSystem);
-
-// Set the theme when the page loads
-setThemeBasedOnSystem();
-
-// Run once DOM is ready
-window.addEventListener('DOMContentLoaded', () => {
-  updateGradient();
-  // Expand or collapse a blog post's extended content
+// Expand or collapse a blog post's extended content
 function togglePost(postElement) {
   const content = postElement.querySelector('.expanded-content');
   if (!content) return;
   content.classList.toggle('visible');
+}
+
+// Run once DOM is ready
+window.addEventListener('DOMContentLoaded', () => {
+  updateGradient();
 
   // Animate dock panel entry
   dockPanel.classList.add('collapsed');
