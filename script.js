@@ -45,6 +45,11 @@ setThemeBasedOnSystem();
 // Run once DOM is ready
 window.addEventListener('DOMContentLoaded', () => {
   updateGradient();
+  // Expand or collapse a blog post's extended content
+function togglePost(postElement) {
+  const content = postElement.querySelector('.expanded-content');
+  if (!content) return;
+  content.classList.toggle('visible');
 
   // Animate dock panel entry
   dockPanel.classList.add('collapsed');
