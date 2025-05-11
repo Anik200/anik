@@ -239,3 +239,7 @@ border-radius: 23px;
 border: 4px solid rgba(100, 255, 255, 0.2);
 width: 130px;
 }
+
+img:hover {
+width: 200px;
+}
