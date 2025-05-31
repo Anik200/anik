@@ -27,6 +27,7 @@ function togglePost(postElement) {
   if (!content) return;
   content.classList.toggle('visible');
 }
+
 // Function to apply theme based on system preference
 function setThemeBasedOnSystem() {
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -42,16 +43,8 @@ function setThemeBasedOnSystem() {
   }
 }
 
-// Listen for changes in system theme preference
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setThemeBasedOnSystem);
-
-// Set the theme when the page loads
-setThemeBasedOnSystem();
-
-// Set up theme toggle button
-toggleBtn.addEventListener('click', toggleTheme);
-
-//typing animation
+// Typing animation for heading
+function typeText(elementId, text, speed = 100) {
   const element = document.getElementById(elementId);
   let i = 0;
 
@@ -66,7 +59,15 @@ toggleBtn.addEventListener('click', toggleTheme);
   type();
 }
 
+// Listen for changes in system theme preference
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setThemeBasedOnSystem);
+
+// Set up theme toggle button
+toggleBtn.addEventListener('click', toggleTheme);
+
+// Run once DOM is ready
 window.addEventListener('DOMContentLoaded', () => {
+  setThemeBasedOnSystem();
   updateGradient();
 
   // Animate dock panel entry
@@ -77,7 +78,6 @@ window.addEventListener('DOMContentLoaded', () => {
     dockPanel.classList.add('expanded');
   }, 100);
 
-  // Start typing effect for heading
+  // Start typing animation
   typeText("typed-heading", "Anik Biswas", 120);
 });
-
