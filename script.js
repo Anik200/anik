@@ -1,4 +1,4 @@
-// DOM Elements
+// DOM Elements 
 const background = document.getElementById('background');
 const toggleBtn = document.getElementById('theme-toggle');
 const body = document.body;
