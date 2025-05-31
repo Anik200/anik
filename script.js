@@ -64,3 +64,34 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Set up theme toggle button
 toggleBtn.addEventListener('click', toggleTheme);
+
+//typing animation
+  const element = document.getElementById(elementId);
+  let i = 0;
+
+  function type() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    }
+  }
+
+  type();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  updateGradient();
+
+  // Animate dock panel entry
+  dockPanel.classList.add('collapsed');
+  void dockPanel.offsetWidth; // Force reflow
+  setTimeout(() => {
+    dockPanel.classList.remove('collapsed');
+    dockPanel.classList.add('expanded');
+  }, 100);
+
+  // Start typing effect for heading
+  typeText("typed-heading", "Anik Biswas", 120);
+});
+
