@@ -48,20 +48,6 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', set
 // Set the theme when the page loads
 setThemeBasedOnSystem();
 
-
-// Run once DOM is ready
-window.addEventListener('DOMContentLoaded', () => {
-  updateGradient();
-
-  // Animate dock panel entry
-  dockPanel.classList.add('collapsed');
-  void dockPanel.offsetWidth; // Force reflow
-  setTimeout(() => {
-    dockPanel.classList.remove('collapsed');
-    dockPanel.classList.add('expanded');
-  }, 100);
-});
-
 // Set up theme toggle button
 toggleBtn.addEventListener('click', toggleTheme);
 
