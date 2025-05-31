@@ -1,4 +1,4 @@
-// DOM Elements 
+// DOM Elements
 const background = document.getElementById('background');
 const toggleBtn = document.getElementById('theme-toggle');
 const body = document.body;
@@ -69,6 +69,26 @@ toggleBtn.addEventListener('click', toggleTheme);
 window.addEventListener('DOMContentLoaded', () => {
   setThemeBasedOnSystem();
   updateGradient();
+  
+  // Track mouse movement to update background gradient
+document.addEventListener('mousemove', (e) => {
+  const x = (e.clientX / window.innerWidth) * 100;
+  const y = (e.clientY / window.innerHeight) * 100;
+
+  const isDark = body.classList.contains('dark');
+
+  const glowColor = isDark
+    ? 'rgba(0, 255, 255, 0.1)'   // dark mode glow
+    : 'rgba(0, 255, 171, 0.15)'; // light mode glow
+
+  const radial = `radial-gradient(circle at ${x}% ${y}%, ${glowColor}, transparent 60%)`;
+  const linear = isDark
+    ? 'linear-gradient(135deg, #0C191F, #146d87)'
+    : 'linear-gradient(135deg, #55D9F6, #0e3d4a)';
+
+  background.style.backgroundImage = `${radial}, ${linear}`;
+});
+
 
   // Animate dock panel entry
   dockPanel.classList.add('collapsed');
