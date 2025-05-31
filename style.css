@@ -31,8 +31,10 @@ html, body {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background: linear-gradient(135deg, #55D9F6, #388297);
+  background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 60%),
+              linear-gradient(135deg, #55D9F6, #388297);
   transition: background-image 1s ease;
+  pointer-events: none;
 }
 
 /* Themes */
