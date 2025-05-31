@@ -4,11 +4,14 @@ const toggleBtn = document.getElementById('theme-toggle');
 const body = document.body;
 const dockPanel = document.getElementById('dock-panel');
 
-// Update background gradient based on current theme
+// Update background gradient based on current theme (default linear only)
 function updateGradient() {
-  background.style.backgroundImage = body.classList.contains('dark')
-    ? "linear-gradient(135deg, #0C191F, #146d87)"
-    : "linear-gradient(135deg, #55D9F6, #0e3d4a)";
+  const isDark = body.classList.contains('dark');
+  const linear = isDark
+    ? 'linear-gradient(135deg, #0C191F, #146d87)'
+    : 'linear-gradient(135deg, #55D9F6, #0e3d4a)';
+
+  background.style.backgroundImage = linear;
 }
 
 // Toggle between light and dark themes
@@ -28,18 +31,18 @@ function togglePost(postElement) {
   content.classList.toggle('visible');
 }
 
-// Function to apply theme based on system preference
+// Set theme based on system preference
 function setThemeBasedOnSystem() {
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  
+
   if (prefersDark) {
     body.classList.add('dark');
     body.classList.remove('light');
-    toggleBtn.innerHTML = '<i class="fas fa-sun"></i>'; // Set sun icon for dark theme
+    toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
   } else {
     body.classList.add('light');
     body.classList.remove('dark');
-    toggleBtn.innerHTML = '<i class="fas fa-moon"></i>'; // Set moon icon for light theme
+    toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
   }
 }
 
@@ -59,36 +62,43 @@ function typeText(elementId, text, speed = 100) {
   type();
 }
 
-// Listen for changes in system theme preference
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setThemeBasedOnSystem);
-
-// Set up theme toggle button
-toggleBtn.addEventListener('click', toggleTheme);
-
-// Run once DOM is ready
-window.addEventListener('DOMContentLoaded', () => {
-  setThemeBasedOnSystem();
-  updateGradient();
-  
-  // Track mouse movement to update background gradient
-document.addEventListener('mousemove', (e) => {
-  const x = (e.clientX / window.innerWidth) * 100;
-  const y = (e.clientY / window.innerHeight) * 100;
+// Cursor-following gradient (mouse + touch)
+function updateCursorGradient(x, y) {
+  const xPercent = (x / window.innerWidth) * 100;
+  const yPercent = (y / window.innerHeight) * 100;
 
   const isDark = body.classList.contains('dark');
-
   const glowColor = isDark
-    ? 'rgba(0, 255, 255, 0.1)'   // dark mode glow
-    : 'rgba(0, 255, 171, 0.15)'; // light mode glow
+    ? 'rgba(0, 255, 255, 0.1)'
+    : 'rgba(255, 255, 255, 0.15)';
 
-  const radial = `radial-gradient(circle at ${x}% ${y}%, ${glowColor}, transparent 60%)`;
+  const radial = `radial-gradient(circle at ${xPercent}% ${yPercent}%, ${glowColor}, transparent 60%)`;
   const linear = isDark
     ? 'linear-gradient(135deg, #0C191F, #146d87)'
     : 'linear-gradient(135deg, #55D9F6, #0e3d4a)';
 
   background.style.backgroundImage = `${radial}, ${linear}`;
+}
+
+// Add event listeners for both mouse and touch
+document.addEventListener('mousemove', (e) => {
+  updateCursorGradient(e.clientX, e.clientY);
 });
 
+document.addEventListener('touchmove', (e) => {
+  if (e.touches.length > 0) {
+    const touch = e.touches[0];
+    updateCursorGradient(touch.clientX, touch.clientY);
+  }
+}, { passive: true });
+
+// Listen for system theme changes
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setThemeBasedOnSystem);
+
+// Setup on DOM ready
+window.addEventListener('DOMContentLoaded', () => {
+  setThemeBasedOnSystem();
+  updateGradient();
 
   // Animate dock panel entry
   dockPanel.classList.add('collapsed');
@@ -98,6 +108,9 @@ document.addEventListener('mousemove', (e) => {
     dockPanel.classList.add('expanded');
   }, 100);
 
-  // Start typing animation
+  // Typing heading
   typeText("typed-heading", "Anik Biswas", 120);
+
+  // Theme toggle button
+  toggleBtn.addEventListener('click', toggleTheme);
 });
