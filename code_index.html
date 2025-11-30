@@ -28,8 +28,98 @@
       color: #d4d4d4;
       font-family: 'JetBrainsMonoNF', 'JetBrains Mono', 'Fira Code', monospace;
       margin: 0;
-      padding: 20px;
+      padding: 10px; /* Reduced padding for mobile */
       overflow-x: hidden;
+    }
+
+    /* Mobile responsiveness */
+    @media screen and (max-width: 768px) {
+      body {
+        padding: 5px;
+      }
+
+      .container {
+        padding: 10px;
+      }
+
+      header {
+        padding: 10px 0;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .file-list {
+        grid-template-columns: 1fr; /* Single column on mobile */
+        gap: 10px;
+      }
+
+      .file-card {
+        padding: 10px;
+      }
+
+      .file-card h3 {
+        font-size: 1rem;
+      }
+
+      .code-container {
+        padding: 10px;
+        margin-top: 15px;
+      }
+
+      .code-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .close-btn {
+        align-self: flex-end;
+      }
+
+      pre {
+        padding: 8px; /* Reduced padding for mobile */
+        font-size: 12px; /* Smaller font for mobile */
+      }
+
+      .back-to-top, .back-to-home {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+        bottom: 15px;
+        right: 15px;
+      }
+
+      .back-to-top {
+        right: 60px; /* Adjusted spacing for mobile */
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .container {
+        padding: 5px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .file-card h3 {
+        font-size: 0.9rem;
+      }
+
+      pre {
+        font-size: 10px; /* Even smaller for very small screens */
+      }
+
+      .back-to-home {
+        right: 15px;
+      }
+
+      .back-to-top {
+        right: 60px;
+      }
     }
     
     .container {
@@ -139,6 +229,25 @@
       overflow-x: auto;
       padding: 15px;
       margin: 0;
+      max-width: 100vw; /* Ensure it doesn't exceed viewport width */
+    }
+
+    /* Add scroll hint for mobile */
+    pre::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    pre::-webkit-scrollbar-track {
+      background: #2d2d30;
+    }
+
+    pre::-webkit-scrollbar-thumb {
+      background: #565656;
+      border-radius: 3px;
+    }
+
+    pre::-webkit-scrollbar-thumb:hover {
+      background: #707070;
     }
     
     code {
@@ -149,6 +258,14 @@
     
     .line-numbers .line-numbers-rows {
       border-right: 1px solid #3e3e3e;
+      width: 25px; /* Default width */
+    }
+
+    @media screen and (max-width: 768px) {
+      .line-numbers .line-numbers-rows {
+        width: 20px; /* Smaller width on mobile */
+        font-size: 10px;
+      }
     }
     
     footer {
@@ -161,6 +278,26 @@
     }
     
     .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 80px;
+      background-color: #3c3c3c;
+      color: #d4d4d4;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-family: 'JetBrainsMonoNF', 'JetBrains Mono', 'Fira Code', monospace;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-home {
       position: fixed;
       bottom: 20px;
       right: 20px;
@@ -177,13 +314,33 @@
       font-size: 1.2rem;
       font-family: 'JetBrainsMonoNF', 'JetBrains Mono', 'Fira Code', monospace;
       z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-home:hover, .back-to-top:hover {
+      background-color: #4a4a4a;
+      transform: scale(1.1);
+    }
+
+    .back-to-home i {
+      transition: transform 0.3s ease;
+    }
+
+    .back-to-home:hover i {
+      transform: scale(1.2);
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Code Index</h1>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <a href="index.html" style="color: #569cd6; text-decoration: none; font-family: 'JetBrainsMonoNF', 'JetBrains Mono', 'Fira Code', monospace; display: flex; align-items: center;">
+          <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Back to Home
+        </a>
+        <h1 style="margin: 0;">Code Index</h1>
+        <div style="width: 120px;"></div> <!-- Spacer to balance the layout -->
+      </div>
       <p class="description">Browse and explore the C programming examples from my collection</p>
     </header>
     
@@ -205,6 +362,7 @@
   </div>
   
   <button class="back-to-top" onclick="scrollToTop()">↑</button>
+  <button class="back-to-home" onclick="goToHome()" title="Go to homepage"><i class="fas fa-home"></i></button>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
@@ -300,6 +458,11 @@
     // Scroll to top
     function scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Go to homepage
+    function goToHome() {
+      window.location.href = 'index.html';
     }
   </script>
 </body>
