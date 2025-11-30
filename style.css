@@ -19,7 +19,7 @@
 }
 
 html, body {
-  font-family: 'JetBrainsMonoNF', monospace;
+  font-family: 'JetBrainsMonoNF', 'JetBrains Mono', 'Fira Code', monospace;
   transition: background-color 0.3s, color 0.3s;
   overflow-x: hidden;
 }
