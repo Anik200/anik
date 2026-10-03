@@ -1172,9 +1172,8 @@ img {
     gap: 8px;
   }
 
-  /* Hide non-essential desktop clock and coffee link to maximize screen real-estate */
-  #tray-clock,
-  .tray-coffee-btn {
+  /* Hide non-essential desktop clock on mobile to maximize screen real-estate */
+  #tray-clock {
     display: none !important;
   }
 
