@@ -51,9 +51,10 @@
   let targetTiltX = 0;
   let mistOffset = 0;
 
-  // Lightning system
+  // Lightning & Audio Systems
   let lightningAlpha = 0;
   let nextLightningTime = Date.now() + 8000;
+  let isRainSoundPlaying = false;
 
   // City Skyline Buildings Cache & Revolving Panoramic Loop (18,000px World)
   let distantBuildings = [];
@@ -711,6 +712,20 @@
     ctx.restore();
   }
 
+  function playLightningThunder(alpha) {
+    const thunderAudio = document.getElementById('ambient-thunder');
+    if (!isRainSoundPlaying || !thunderAudio) return;
+    const soundDelay = Math.random() * 250 + 150;
+    setTimeout(() => {
+      if (!isRainSoundPlaying) return;
+      try {
+        thunderAudio.currentTime = 0;
+        thunderAudio.volume = Math.min(0.85, Math.max(0.35, alpha * 0.75));
+        thunderAudio.play().catch(() => {});
+      } catch (e) {}
+    }, soundDelay);
+  }
+
   function handleLightning() {
     if (weather.lightningMode === 'off') return;
     const now = Date.now();
@@ -720,6 +735,7 @@
         ? Math.random() * 3500 + 1500 
         : Math.random() * 12000 + 7000;
       nextLightningTime = now + delay;
+      playLightningThunder(lightningAlpha);
     }
   }
 
@@ -824,6 +840,62 @@
 
   if (themeToggleBtn) {
     themeToggleBtn.addEventListener('click', toggleTheme);
+  }
+
+  // -------------------------------------------------------------------------
+  // Ambient Rain & Lightning Audio Controls
+  // -------------------------------------------------------------------------
+  const rainAudio = document.getElementById('ambient-rain');
+  const rainSoundBtn = document.getElementById('rain-sound-toggle');
+  let rainFadeTimer = null;
+
+  if (rainSoundBtn && rainAudio) {
+    rainAudio.volume = 0;
+
+    rainSoundBtn.addEventListener('click', () => {
+      isRainSoundPlaying = !isRainSoundPlaying;
+      if (rainFadeTimer) clearInterval(rainFadeTimer);
+
+      if (isRainSoundPlaying) {
+        rainSoundBtn.classList.add('active');
+        rainSoundBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+        rainSoundBtn.setAttribute('title', 'Mute ambient rain & thunder');
+
+        rainAudio.play().then(() => {
+          let currentVol = rainAudio.volume;
+          rainFadeTimer = setInterval(() => {
+            currentVol = Math.min(0.65, currentVol + 0.05);
+            rainAudio.volume = currentVol;
+            if (currentVol >= 0.65) clearInterval(rainFadeTimer);
+          }, 40);
+        }).catch(() => {
+          isRainSoundPlaying = false;
+          rainSoundBtn.classList.remove('active');
+          rainSoundBtn.innerHTML = '<i class="fa-solid fa-cloud-rain"></i>';
+          rainSoundBtn.setAttribute('title', 'Play ambient rain sound');
+        });
+      } else {
+        rainSoundBtn.classList.remove('active');
+        rainSoundBtn.innerHTML = '<i class="fa-solid fa-cloud-rain"></i>';
+        rainSoundBtn.setAttribute('title', 'Play ambient rain sound');
+
+        let currentVol = rainAudio.volume;
+        rainFadeTimer = setInterval(() => {
+          currentVol = Math.max(0, currentVol - 0.05);
+          rainAudio.volume = currentVol;
+          if (currentVol <= 0) {
+            clearInterval(rainFadeTimer);
+            rainAudio.pause();
+          }
+        }, 40);
+
+        const thunderAudio = document.getElementById('ambient-thunder');
+        if (thunderAudio) {
+          thunderAudio.pause();
+          thunderAudio.currentTime = 0;
+        }
+      }
+    });
   }
 
   // -------------------------------------------------------------------------
@@ -1013,9 +1085,83 @@
   }
 
   // -------------------------------------------------------------------------
-  // 12. Initialization
+  // 13. Hacker/Nerd-Font Glitch Boot Intro (Assembling into "ANIK")
+  // -------------------------------------------------------------------------
+  function initBootIntro() {
+    const introOverlay = document.getElementById('site-intro');
+    const wordEl = document.getElementById('intro-glitch-word');
+    const sublineEl = document.getElementById('intro-subline');
+    if (!introOverlay || !wordEl) return;
+
+    const TARGET = "ANIK";
+    const GLYPHS = "01_~#<>!/*&^%$█▓▒░[]{}λπµ§±÷×≠≈≡≤≥ØΨΩ";
+    const charElements = wordEl.querySelectorAll('.glitch-char');
+    const startTime = performance.now();
+    let isDismissed = false;
+    let animFrame = null;
+
+    const lockTimes = [450, 750, 1050, 1350];
+
+    function updateGlitch(currentTime) {
+      if (isDismissed) return;
+      const elapsed = currentTime - startTime;
+      let allLocked = true;
+
+      charElements.forEach((el, i) => {
+        if (elapsed >= lockTimes[i]) {
+          if (el.textContent !== TARGET[i]) {
+            el.textContent = TARGET[i];
+            el.classList.remove('scrambling');
+            el.classList.add('locked');
+          }
+        } else {
+          allLocked = false;
+          const randomGlyph = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+          el.textContent = randomGlyph;
+          if (!el.classList.contains('scrambling')) {
+            el.classList.add('scrambling');
+          }
+        }
+      });
+
+      if (allLocked) {
+        if (sublineEl && !sublineEl.classList.contains('visible')) {
+          sublineEl.classList.add('visible');
+        }
+        if (elapsed >= 1850) {
+          dismissIntro();
+          return;
+        }
+      }
+
+      animFrame = requestAnimationFrame(updateGlitch);
+    }
+
+    function dismissIntro() {
+      if (isDismissed) return;
+      isDismissed = true;
+      if (animFrame) cancelAnimationFrame(animFrame);
+
+      charElements.forEach((el, i) => {
+        el.textContent = TARGET[i];
+        el.classList.remove('scrambling');
+        el.classList.add('locked');
+      });
+
+      introOverlay.classList.add('fade-out');
+      setTimeout(() => {
+        introOverlay.style.display = 'none';
+      }, 600);
+    }
+
+    animFrame = requestAnimationFrame(updateGlitch);
+  }
+
+  // -------------------------------------------------------------------------
+  // 14. Initialization
   // -------------------------------------------------------------------------
   document.addEventListener('DOMContentLoaded', () => {
+    initBootIntro();
     applyGlassStyles();
     const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
     applyTheme(savedTheme);

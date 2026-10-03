@@ -277,6 +277,14 @@ img {
   font-size: 0.85rem;
 }
 
+.tray-btn.active {
+  color: #ffffff !important;
+}
+
+body.light .tray-btn.active {
+  color: #0f172a !important;
+}
+
 #tray-clock {
   color: #666666 !important;
   font-size: 0.76rem;
@@ -1348,6 +1356,90 @@ img {
     width: 36px;
     height: 36px;
   }
+}
+
+/* --------------------------------------------------------------------------
+   Glitch Boot Intro Screen
+   -------------------------------------------------------------------------- */
+.site-intro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #030406;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  overflow: hidden;
+  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.55s ease;
+}
+
+.site-intro.fade-out {
+  opacity: 0;
+  transform: scale(1.05);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.intro-content {
+  text-align: center;
+  position: relative;
+}
+
+.intro-glitch-word {
+  font-family: var(--font-mono);
+  font-size: clamp(4.5rem, 13vw, 7.5rem);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.glitch-char {
+  display: inline-block;
+  min-width: 0.72em;
+  text-align: center;
+  transition: color 0.12s ease, transform 0.1s ease;
+}
+
+.glitch-char.scrambling {
+  color: #484848;
+}
+
+.glitch-char.locked {
+  color: #ffffff;
+  animation: charLockFlash 0.28s ease-out;
+}
+
+@keyframes charLockFlash {
+  0% { transform: scale(1.15); color: #ffffff; }
+  50% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+.intro-subline {
+  margin-top: 18px;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  letter-spacing: 0.2em;
+  color: #666666;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.intro-subline.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* --------------------------------------------------------------------------
