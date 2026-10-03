@@ -3,100 +3,839 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Blog</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+  <meta name="description" content="Anik Biswas · Student, Linux enthusiast, and C programmer from West Bengal, India." />
+  <title>Anik Biswas · anik.dev</title>
 
-  <!-- FontAwesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts: JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Martian+Mono:wght@100..800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
+  <!-- FontAwesome 6.5 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Lightbox2 CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
+
+  <!-- Windows NT Monochrome Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="light">
-  <div id="background"></div>
+<body class="dark">
+  <!-- 2.5D Raining Cityscape Animated Background Canvas -->
+  <canvas id="rain-canvas"></canvas>
 
-  <!-- Floating Dock Panel -->
-  <div id="dock-panel" class="collapsed">
-   <a href="https://www.youtube.com/watch?embeds_referring_euri=https%3A%2F%2Flichess.org%2F&source_ve_path=Mjg2NjQsMTY0NTAz&v=j5a0jTc9S10&feature=youtu.be"> <span class="mug"><i class="fa-solid fa-mug-hot" title="Special Button"></i></span></a>
-    <span class="dock-discord"><a href="https://discord.gg/pp7jYp752g" 
-     target="_blank" 
-     title="Join my Discord server" 
-     class="dock-discord">
-    <i class="fab fa-discord" style="color: white;"></i>
-  </a></span>
-    <button id="theme-toggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
+  <!-- Top Bar / Dock -->
+  <nav id="nt-taskbar" aria-label="Navigation">
+    <div class="taskbar-left">
+      <a href="#" class="nt-start-btn" title="Anik">anik</a>
+
+      <div class="taskbar-tasks">
+        <a href="#about" class="nt-task-item task-home">about</a>
+        <a href="#projects" class="nt-task-item">projects</a>
+        <a href="#blog" class="nt-task-item">posts</a>
+        <a href="#music" class="nt-task-item">music</a>
+        <a href="#steam" class="nt-task-item">steam</a>
+        <a href="#legacy" class="nt-task-item">legacy</a>
+        <a href="#contact" class="nt-task-item">contact</a>
+      </div>
+    </div>
+
+    <!-- System Tray -->
+    <div class="taskbar-tray">
+
+      <a href="https://discord.gg/pp7jYp752g" 
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="tray-btn" 
+         title="Discord: join server"
+         aria-label="Discord">
+        <i class="fa-brands fa-discord"></i>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=j5a0jTc9S10" 
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="tray-btn tray-coffee-btn" 
+         title="Lofi & coffee"
+         aria-label="Coffee">
+        <i class="fa-solid fa-mug-hot"></i>
+      </a>
+
+      <button id="theme-toggle" class="tray-btn" title="Toggle theme (dark/light)" aria-label="Toggle Theme">
+        <i class="fa-solid fa-sun"></i>
+      </button>
+
+      <span id="tray-clock">--:-- --</span>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Hero / Shell Window -->
+    <header class="nt-window">
+      <div class="nt-titlebar">
+        <div class="nt-titlebar-left">
+          <i class="fa-solid fa-terminal nt-titlebar-icon"></i>
+          <span>anik@arch: ~</span>
+        </div>
+        <div class="nt-titlebar-controls">
+          <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+          <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
+          <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+        </div>
+      </div>
+
+      <div class="nt-menubar">
+        <span>File</span>
+        <span>Edit</span>
+        <span>View</span>
+        <span>Help</span>
+      </div>
+
+      <div class="nt-window-content">
+        <div class="hero-tag">
+          arch linux · hyprland · i3wm
+        </div>
+        <div class="hero-type-row">
+          <span class="hero-prompt">&gt;</span>
+          <h1 id="typed-heading">Anik Biswas</h1>
+          <span class="cursor-caret">_</span>
+        </div>
+
+        <p class="hero-desc">
+          CS student, Linux tinkerer, and minimalist. I like writing small C utilities,sometimes bash, ricing window managers, riding my bicycle, playing some video games and keeping my music library offline instead of streaming.
+        </p>
+
+        <div class="nt-client-box" style="margin-bottom: 14px; font-size: 0.82rem;">
+          <div><strong style="color: var(--text-main);">User:</strong> Anik Biswas</div>
+          <div><strong style="color: var(--text-main);">Location:</strong> West Bengal, India</div>
+          <div><strong style="color: var(--text-main);">System:</strong> Arch Linux / Hyprland / i3wm / Windows 11 / Void linux</div>
+          <div><strong style="color: var(--text-main);">Audio:</strong> Seeker + Navidrome + Symfonium</div>
+          <div><strong style="color: var(--text-main);">Email:</strong> <a href="mailto:anik@redpilllabs.in" onclick="copyEmail('anik@redpilllabs.in', event)" style="color: var(--text-main); font-weight: bold; text-decoration: underline;">anik@redpilllabs.in</a></div>
+        </div>
+
+        <div class="nt-btn-row">
+          <a href="#projects" class="nt-btn">
+            <i class="fa-solid fa-folder-open"></i> Projects
+          </a>
+          <a href="https://github.com/Anik200/dotfiles" target="_blank" rel="noopener noreferrer" class="nt-btn">
+            <i class="fa-brands fa-github"></i> Dotfiles
+          </a>
+          <a href="mailto:anik@redpilllabs.in" onclick="copyEmail('anik@redpilllabs.in', event)" class="nt-btn">
+            <i class="fa-regular fa-envelope"></i> anik@redpilllabs.in
+          </a>
+        </div>
+      </div>
+
+      <div class="nt-statusbar">
+        <div class="nt-status-panel flex-fill">ready</div>
+        <div class="nt-status-panel">fish shell</div>
+        <div class="nt-status-panel">utf-8</div>
+      </div>
+    </header>
+
+    <!-- Main Content Sections -->
+    <main>
+      <!-- About Section Window -->
+      <section id="about">
+        <article class="nt-window">
+          <div class="nt-titlebar">
+            <div class="nt-titlebar-left">
+              <i class="fa-regular fa-file-lines nt-titlebar-icon"></i>
+              <span>about.txt</span>
+            </div>
+            <div class="nt-titlebar-controls">
+              <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
+              <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+            </div>
+          </div>
+
+          <div class="nt-menubar">
+            <span>File</span>
+            <span>Edit</span>
+            <span>View</span>
+            <span>Help</span>
+          </div>
+
+          <div class="nt-window-content">
+            <p class="hero-desc">
+              Hi, I'm Anik. I'm a student from <strong style="color: var(--text-main);">West Bengal, India</strong>. Most of my time goes into writing small programs in C, tweaking my Hyprland setup, and going on long dopamine-filled cycling trips with friends. This website is a quiet place for my projects, configs, and notes.
+            </p>
+
+            <div class="tech-tag-row">
+              <span class="tech-tag"><i class="fa-solid fa-microchip"></i> Arch Linux</span>
+              <span class="tech-tag"><i class="fa-solid fa-layer-group"></i> Hyprland</span>
+              <span class="tech-tag"><i class="fa-solid fa-terminal"></i> Kitty &amp; Zsh</span>
+              <span class="tech-tag"><i class="fa-solid fa-code"></i> C &amp; Python</span>
+              <span class="tech-tag"><i class="fa-solid fa-bicycle"></i> Cycling</span>
+            </div>
+          </div>
+
+          <div class="nt-statusbar">
+            <div class="nt-status-panel flex-fill">ln 1, col 1</div>
+            <div class="nt-status-panel">100%</div>
+            <div class="nt-status-panel">crlf</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- GitHub Projects Showcase Window -->
+      <section id="projects">
+        <article class="nt-window">
+          <div class="nt-titlebar">
+            <div class="nt-titlebar-left">
+              <i class="fa-solid fa-folder-open nt-titlebar-icon"></i>
+              <span>projects</span>
+            </div>
+            <div class="nt-titlebar-controls">
+              <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
+              <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+            </div>
+          </div>
+
+          <div class="nt-menubar">
+            <span>View</span>
+            <span>Sort: Updated</span>
+            <span>github.com/Anik200</span>
+          </div>
+
+          <div class="nt-window-content">
+            <p class="hero-desc" style="margin-bottom: 12px;">
+              Projects, tools, and configs I've built and shared on GitHub:
+            </p>
+
+            <div class="projects-grid">
+              <!-- Project 1: Nimki -->
+              <div class="project-card">
+                <div>
+                  <div class="project-title">
+                    <span><i class="fa-solid fa-pen-to-square"></i> Nimki</span>
+                    <span class="project-badge">C / ncurses</span>
+                  </div>
+                  <div class="project-desc">
+                    A simple terminal text editor written from scratch in C with mouse cursor snapping, file tree navigator, search/find, undo history, and line numbers.
+                  </div>
+                  <!-- Screenshot Preview -->
+                  <a href="https://github.com/user-attachments/assets/a848845e-f84d-4dff-8592-0675947cb938" data-lightbox="nimki-gallery" data-title="Nimki Text Editor in C" class="project-preview-wrap">
+                    <img src="https://github.com/user-attachments/assets/a848845e-f84d-4dff-8592-0675947cb938" alt="Nimki Editor Preview" loading="lazy" />
+                    <span class="gallery-overlay-badge"><i class="fa-solid fa-magnifying-glass"></i> Screenshot</span>
+                  </a>
+                </div>
+                <div class="nt-btn-row" style="margin-top: 8px;">
+                  <a href="https://github.com/Anik200/nimki" target="_blank" rel="noopener noreferrer" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
+                    <i class="fa-brands fa-github"></i> Repository
+                  </a>
+                  <a href="https://github.com/user-attachments/assets/4741e94a-89fd-435b-b76d-7c6b9c1902dc" data-lightbox="nimki-gallery" data-title="Nimki Editor View 2" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
+                    <i class="fa-solid fa-images"></i> Screenshots
+                  </a>
+                </div>
+              </div>
+
+              <!-- Project 2: Hyprland Dotfiles -->
+              <div class="project-card">
+                <div>
+                  <div class="project-title">
+                    <span><i class="fa-solid fa-desktop"></i> Hyprdots</span>
+                    <span class="project-badge">Hyprland / Arch</span>
+                  </div>
+                  <div class="project-desc">
+                    My Hyprland desktop config on Arch Linux. Includes custom Waybar themes, smooth bezier animations, wofi menus, dynamic wallpapers, and lockscreen.
+                  </div>
+                  <!-- Screenshot Preview -->
+                  <a href="https://github.com/user-attachments/assets/22469361-ce23-4507-a909-11e8abaf7b98" data-lightbox="dotfiles-gallery" data-title="Hyprland Desktop Setup" class="project-preview-wrap">
+                    <img src="https://github.com/user-attachments/assets/22469361-ce23-4507-a909-11e8abaf7b98" alt="Hyprland Rice Preview" loading="lazy" />
+                    <span class="gallery-overlay-badge"><i class="fa-solid fa-magnifying-glass"></i> Screenshot</span>
+                  </a>
+                </div>
+                <div class="nt-btn-row" style="margin-top: 8px;">
+                  <a href="https://github.com/Anik200/dotfiles" target="_blank" rel="noopener noreferrer" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
+                    <i class="fa-brands fa-github"></i> Repository
+                  </a>
+                  <a href="https://github.com/user-attachments/assets/be87a4c4-c140-4168-8fc6-4eefd6f78191" data-lightbox="dotfiles-gallery" data-title="Hyprland Window Layout" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
+                    <i class="fa-solid fa-images"></i> Screenshots
+                  </a>
+                </div>
+              </div>
+
+              <!-- Project 3: m8mouser-helper -->
+              <div class="project-card">
+                <div>
+                  <div class="project-title">
+                    <span><i class="fa-solid fa-computer-mouse"></i> m8mouser-helper</span>
+                    <span class="project-badge">Bash / Linux</span>
+                  </div>
+                  <div class="project-desc">
+                    Bash script to turn off the bright RGB LEDs on gaming mice using the Philips SPK9304 chip under Linux without proprietary drivers.
+                  </div>
+                  <div class="nt-client-box" style="font-size: 0.74rem; padding: 8px; margin-top: 6px;">
+                    <code>$ ./m8mouser-helper.sh --led off</code>
+                  </div>
+                </div>
+                <div class="nt-btn-row" style="margin-top: 8px;">
+                  <a href="https://github.com/Anik200/m8mouser-helper" target="_blank" rel="noopener noreferrer" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
+                    <i class="fa-brands fa-github"></i> Repository
+                  </a>
+                </div>
+              </div>
+
+              <!-- Project 4: waybar-wsindicator -->
+              <div class="project-card">
+                <div>
+                  <div class="project-title">
+                    <span><i class="fa-solid fa-layer-group"></i> waybar-wsindicator</span>
+                    <span class="project-badge">Waybar / CSS</span>
+                  </div>
+                  <div class="project-desc">
+                    Custom workspace indicator styling and JSON configuration for Waybar on Wayland.
+                  </div>
+                  <div class="nt-client-box" style="font-size: 0.74rem; padding: 8px; margin-top: 6px;">
+                    <code>~/.config/waybar/config.jsonc</code>
+                  </div>
+                </div>
+                <div class="nt-btn-row" style="margin-top: 8px;">
+                  <a href="https://github.com/Anik200/waybar-wsindicator" target="_blank" rel="noopener noreferrer" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
+                    <i class="fa-brands fa-github"></i> Repository
+                  </a>
+                </div>
+              </div>
+
+              <!-- Project 5: mldl -->
+              <div class="project-card">
+                <div>
+                  <div class="project-title">
+                    <span><i class="fa-solid fa-music"></i> mldl</span>
+                    <span class="project-badge">Web App</span>
+                  </div>
+                  <div class="project-desc">
+                    Music lyric downloader with syllable-synced Apple Music TTML, word-by-word karaoke previews, and batch LRC export.
+                  </div>
+                  <div class="nt-client-box" style="font-size: 0.74rem; padding: 8px; margin-top: 6px;">
+                    <code>Apple Music TTML • Enhanced LRC • AMLL Preview</code>
+                  </div>
+                </div>
+                <div class="nt-btn-row" style="margin-top: 8px;">
+                  <a href="https://anik200.github.io/mldl" target="_blank" rel="noopener noreferrer" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Web App
+                  </a>
+                  <a href="https://github.com/Anik200/mldl-android" target="_blank" rel="noopener noreferrer" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
+                    <i class="fa-brands fa-android"></i> Android Version
+                  </a>
+                </div>
+              </div>
+
+              <!-- Project 6: mldl-android -->
+              <div class="project-card">
+                <div>
+                  <div class="project-title">
+                    <span><i class="fa-brands fa-android"></i> mldl-android</span>
+                    <span class="project-badge">Android</span>
+                  </div>
+                  <div class="project-desc">
+                    Android companion app to scan local music files, download synced Apple Music TTML &amp; LRC lyrics in bulk, and preview lyrics on mobile devices.
+                  </div>
+                  <div class="nt-client-box" style="font-size: 0.74rem; padding: 8px; margin-top: 6px;">
+                    <code>$ git clone https://github.com/Anik200/mldl-android</code>
+                  </div>
+                </div>
+                <div class="nt-btn-row" style="margin-top: 8px;">
+                  <a href="https://github.com/Anik200/mldl-android" target="_blank" rel="noopener noreferrer" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
+                    <i class="fa-brands fa-github"></i> Repository
+                  </a>
+                  <a href="https://anik200.github.io/mldl/mldl.apk" target="_blank" rel="noopener noreferrer" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
+                    <i class="fa-solid fa-download"></i> Download APK
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="nt-statusbar">
+            <div class="nt-status-panel flex-fill">6 projects listed</div>
+            <div class="nt-status-panel">github: @Anik200</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Latest Posts Section -->
+      <section id="blog">
+        <!-- Post 1: Cycling Trip Window -->
+        <article class="nt-window">
+          <div class="nt-titlebar">
+            <div class="nt-titlebar-left">
+              <i class="fa-solid fa-bicycle nt-titlebar-icon"></i>
+              <span>cycling_trip.txt</span>
+            </div>
+            <div class="nt-titlebar-controls">
+              <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
+              <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+            </div>
+          </div>
+
+          <div class="nt-window-content">
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">
+              May 2025
+            </div>
+
+            <p class="hero-desc">
+              I recently went on a cycling trip with a friend — had a huge burst of dopamine throughout the whole ride, pure fun. Cycling has always been my favorite way to clear my head, stay fit, and explore quiet roads. Here are a few snapshots from the ride:
+            </p>
+
+            <!-- Accordion Gallery (Strictly Zero Radius Inset 3D) -->
+            <div class="accordion-wrapper">
+              <div class="accordion-content">
+                <div class="expanded-inner">
+                  <div style="font-size: 0.78rem; color: var(--text-dim); margin-bottom: 8px;">
+                    <i class="fa-solid fa-camera"></i> Click to enlarge:
+                  </div>
+                  <div class="photo-gallery-grid">
+                    <a href="./img/image1.jpg" data-lightbox="cycling-gallery" data-title="Cycling route & scenic halt" class="gallery-card">
+                      <img src="./img/image1.jpg" alt="Cycling route 1" loading="lazy" />
+                      <span class="gallery-overlay-badge">01</span>
+                    </a>
+                    <a href="./img/image2.jpg" data-lightbox="cycling-gallery" data-title="Roadside stop & lush greenery" class="gallery-card">
+                      <img src="./img/image2.jpg" alt="Cycling route 2" loading="lazy" />
+                      <span class="gallery-overlay-badge">02</span>
+                    </a>
+                    <a href="./img/image3.jpg" data-lightbox="cycling-gallery" data-title="Bicycle resting spot" class="gallery-card">
+                      <img src="./img/image3.jpg" alt="Cycling route 3" loading="lazy" />
+                      <span class="gallery-overlay-badge">03</span>
+                    </a>
+                    <a href="./img/image4.jpg" data-lightbox="cycling-gallery" data-title="Sunset & scenic landscape" class="gallery-card">
+                      <img src="./img/image4.jpg" alt="Cycling route 4" loading="lazy" />
+                      <span class="gallery-overlay-badge">04</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 12px;">
+              <button class="nt-btn" data-type="photos" onclick="togglePostAccordion(this)">
+                <span class="btn-label">View Trip &amp; Photos (4)</span>
+                <i class="fa-solid fa-chevron-down" style="font-size: 0.72rem; margin-left: 4px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="nt-statusbar">
+            <div class="nt-status-panel flex-fill">4 photos attached</div>
+            <div class="nt-status-panel">location: West Bengal</div>
+          </div>
+        </article>
+
+        <!-- Post 2: Music Showcase Window -->
+        <article class="nt-window" id="music">
+          <div class="nt-titlebar">
+            <div class="nt-titlebar-left">
+              <i class="fa-solid fa-music nt-titlebar-icon"></i>
+              <span>music_setup.txt</span>
+            </div>
+            <div class="nt-titlebar-controls">
+              <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
+              <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+            </div>
+          </div>
+
+          <div class="nt-window-content">
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">
+              May 11, 2025
+            </div>
+
+            <p class="hero-desc">
+              I like to keep my music library stored offline locally instead of streaming from Spotify or Apple Music. I use <strong>Seeker</strong> (Soulseek network) to grab lossless FLAC albums and play them bit-perfect through <a href="https://symfonium.app/" target="_blank" rel="noopener noreferrer" style="color: var(--text-main); font-weight: bold; text-decoration: underline;">Symfonium</a>.
+            </p>
+
+            <!-- Spinning Vinyl Now Playing Player Bar -->
+            <div class="music-player-bar">
+              <div class="music-vinyl-wrap" title="Daft Punk - Random Access Memories Vinyl">
+                <div class="spinning-vinyl" id="music-vinyl">
+                  <img src="img/ram_album.png" alt="Daft Punk - Random Access Memories Album Art" class="vinyl-album-art" />
+                  <div class="vinyl-center-hole"></div>
+                </div>
+              </div>
+              <div class="music-info">
+                <div class="music-title">Random Access Memories</div>
+                <div class="music-artist">Daft Punk · 24-bit Lossless FLAC</div>
+              </div>
+              <div class="audio-equalizer" id="audio-equalizer" title="Lossless Audio Waveform">
+                <span class="audio-bar"></span>
+                <span class="audio-bar"></span>
+                <span class="audio-bar"></span>
+                <span class="audio-bar"></span>
+                <span class="audio-bar"></span>
+              </div>
+            </div>
+
+            <!-- Audio Rig Hardware Details -->
+            <div class="nt-client-box" style="margin-top: 10px; font-size: 0.78rem; padding: 10px;">
+              <div style="font-weight: bold; margin-bottom: 6px; color: var(--text-main);"><i class="fa-solid fa-headphones"></i> Audio Gear &amp; Hardware:</div>
+              <div><strong style="color: var(--text-main);">In-Ear Monitor:</strong> Tangzu Wan'er S.G 2</div>
+              <div><strong style="color: var(--text-main);">DAC:</strong> Audiocular Spark (Hi-Res Type-C DAC)</div>
+              <div><strong style="color: var(--text-main);">Music Player:</strong> <a href="https://symfonium.app/" target="_blank" rel="noopener noreferrer" style="color: var(--text-main); text-decoration: underline;">Symfonium</a> (Bit-perfect Android player)</div>
+              <div><strong style="color: var(--text-main);">Library:</strong> 24-bit Lossless FLAC via Seeker (Soulseek)</div>
+            </div>
+
+            <div class="tech-tag-row">
+              <a href="https://symfonium.app/" target="_blank" rel="noopener noreferrer" class="tech-tag" style="text-decoration: none;">
+                <i class="fa-solid fa-play"></i> Symfonium
+              </a>
+              <span class="tech-tag"><i class="fa-solid fa-headphones"></i> Tangzu Wan'er S.G 2</span>
+              <span class="tech-tag"><i class="fa-solid fa-bolt"></i> Audiocular Spark</span>
+              <span class="tech-tag"><i class="fa-solid fa-file-audio"></i> 24-bit FLAC</span>
+              <span class="tech-tag"><i class="fa-solid fa-sliders"></i> Bit-Perfect</span>
+              <span class="tech-tag"><i class="fa-solid fa-cloud-arrow-down"></i> Seeker</span>
+            </div>
+          </div>
+
+          <div class="nt-statusbar">
+            <div class="nt-status-panel flex-fill">now playing: daft punk - random access memories</div>
+            <div class="nt-status-panel">dac: audiocular spark</div>
+            <div class="nt-status-panel">player: symfonium</div>
+          </div>
+        </article>
+
+        <!-- Post 3: Launching My Blog Window -->
+        <article class="nt-window">
+          <div class="nt-titlebar">
+            <div class="nt-titlebar-left">
+              <i class="fa-solid fa-rocket nt-titlebar-icon"></i>
+              <span>launching_my_blog.txt</span>
+            </div>
+            <div class="nt-titlebar-controls">
+              <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
+              <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+            </div>
+          </div>
+
+          <div class="nt-window-content">
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">
+              May 10, 2025
+            </div>
+            <p class="hero-desc">
+              Today I decided to finally start writing about my experiences with Linux, development, and personal projects. The web is always at its best when it's built with simple HTML, CSS, and genuine thoughts.
+            </p>
+          </div>
+
+          <div class="nt-statusbar">
+            <div class="nt-status-panel flex-fill">published</div>
+            <div class="nt-status-panel">words: ~100</div>
+          </div>
+        </article>
+
+        <!-- Post 4: Hyprland Setup Window -->
+        <article class="nt-window">
+          <div class="nt-titlebar">
+            <div class="nt-titlebar-left">
+              <i class="fa-solid fa-desktop nt-titlebar-icon"></i>
+              <span>hyprland_setup.txt</span>
+            </div>
+            <div class="nt-titlebar-controls">
+              <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
+              <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+            </div>
+          </div>
+
+          <div class="nt-window-content">
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">
+              May 8, 2025
+            </div>
+
+            <p class="hero-desc">
+              I recently customized my Hyprland config and it's never felt better. Here's a glance at the animation curves and window rules I use on Arch Linux:
+            </p>
+
+            <div class="accordion-wrapper">
+              <div class="accordion-content">
+                <div class="expanded-inner">
+                  <div class="terminal-window">
+                    <div class="terminal-header">
+                      <span>~/.config/hypr/hyprland.conf</span>
+                      <span>Wayland</span>
+                    </div>
+                    <div class="terminal-body">
+                      <div><span class="terminal-prompt">$</span>cat hyprland.conf | grep bezier</div>
+                      <div style="color: #cccccc;">bezier = myBezier, 0.05, 0.9, 0.1, 1.05</div>
+                      <div style="color: #cccccc;">animation = windows, 1, 7, myBezier</div>
+                      <div style="color: #cccccc;">animation = border, 1, 10, default</div>
+                      <div style="color: #cccccc;">animation = fade, 1, 7, default</div>
+                      <div style="color: #cccccc;">animation = workspaces, 1, 6, default</div>
+                    </div>
+                  </div>
+
+                  <div style="margin-top: 10px;">
+                    <a href="https://github.com/Anik200/dotfiles" target="_blank" rel="noopener noreferrer" class="nt-btn">
+                      <i class="fa-brands fa-github"></i> View Full Dotfiles Repository
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 12px;">
+              <button class="nt-btn" data-type="guide" onclick="togglePostAccordion(this)">
+                <span class="btn-label">check them out</span>
+                <i class="fa-solid fa-chevron-down" style="font-size: 0.72rem; margin-left: 4px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="nt-statusbar">
+            <div class="nt-status-panel flex-fill">wm: hyprland</div>
+            <div class="nt-status-panel">distro: arch linux</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Steam Profile Window -->
+      <section id="steam">
+        <article class="nt-window">
+          <div class="nt-titlebar">
+            <div class="nt-titlebar-left">
+              <i class="fa-brands fa-steam nt-titlebar-icon"></i>
+              <span>steam.exe - Community Profile (id/myh3)</span>
+            </div>
+            <div class="nt-titlebar-controls">
+              <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
+              <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+            </div>
+          </div>
+
+          <div class="nt-menubar">
+            <span>Steam</span>
+            <span>View</span>
+            <span>Friends</span>
+            <span>Games</span>
+            <span>Help</span>
+          </div>
+
+          <div class="nt-window-content">
+            <div class="nt-client-box steam-profile-box">
+              <div class="steam-header-row">
+                <a href="https://steamcommunity.com/id/myh3/" target="_blank" rel="noopener noreferrer" class="steam-avatar-wrap" title="View Steam Avatar">
+                  <img src="https://avatars.fastly.steamstatic.com/d613a7f596ab84b19eef68cef0b785b59195ca20.jpg" alt="Steam avatar" />
+                </a>
+
+                <div class="steam-user-meta">
+                  <div class="steam-name-row">
+                    <span class="steam-persona-name">myhem</span>
+                    <span class="steam-level-badge">Level 25</span>
+                  </div>
+                  <div class="steam-status-line">
+                    Currently Online
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quote Box -->
+              <div class="steam-quote-box">
+                &ldquo;check the weather app, there might be a risk of rain&rdquo;
+              </div>
+
+              <!-- Steam Statistics Grid -->
+              <div class="steam-stats-grid">
+                <div class="steam-stat-card">
+                  <div class="steam-stat-number">78</div>
+                  <div class="steam-stat-label">Games</div>
+                </div>
+                <div class="steam-stat-card">
+                  <div class="steam-stat-number">25</div>
+                  <div class="steam-stat-label">Level</div>
+                </div>
+                <div class="steam-stat-card">
+                  <div class="steam-stat-number">22</div>
+                  <div class="steam-stat-label">Badges</div>
+                </div>
+                <div class="steam-stat-card">
+                  <div class="steam-stat-number">14</div>
+                  <div class="steam-stat-label">Awards</div>
+                </div>
+                <div class="steam-stat-card">
+                  <div class="steam-stat-number">204</div>
+                  <div class="steam-stat-label">Items</div>
+                </div>
+                <div class="steam-stat-card">
+                  <div class="steam-stat-number">45</div>
+                  <div class="steam-stat-label">Friends</div>
+                </div>
+              </div>
+
+              <!-- Top Games Row -->
+              <div>
+                <div style="font-size: 0.76rem; color: var(--text-dim); margin-bottom: 4px; font-weight: bold;">
+                  Recent Games:
+                </div>
+                <div class="steam-games-list">
+                  <span class="steam-game-item"><i class="fa-solid fa-gamepad"></i> Risk of Rain 2</span>
+                  <span class="steam-game-item"><i class="fa-solid fa-crosshairs"></i> Counter-Strike 2</span>
+                  <span class="steam-game-item"><i class="fa-solid fa-cat"></i> Bongo Cat</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="nt-btn-row">
+              <a href="https://steamcommunity.com/id/myh3/" target="_blank" rel="noopener noreferrer" class="nt-btn">
+                <i class="fa-brands fa-steam"></i> Open Steam Community Profile
+              </a>
+              <a href="steam://friends/add/76561199484020316" class="nt-btn">
+                <i class="fa-solid fa-user-plus"></i> Add Friend on Steam
+              </a>
+            </div>
+          </div>
+
+          <div class="nt-statusbar">
+            <div class="nt-status-panel flex-fill">78 games owned · level 25 (legendary)</div>
+            <div class="nt-status-panel">steam_id: myh3</div>
+            <div class="nt-status-panel">status: online</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Legacy View Window -->
+      <section id="legacy">
+        <article class="nt-window">
+          <div class="nt-titlebar">
+            <div class="nt-titlebar-left">
+              <i class="fa-solid fa-clock-rotate-left nt-titlebar-icon"></i>
+              <span>legacy_view.bak</span>
+            </div>
+            <div class="nt-titlebar-controls">
+              <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
+              <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+            </div>
+          </div>
+
+          <div class="nt-window-content">
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">
+              Archived from May 2025 (v1.0)
+            </div>
+
+            <p class="hero-desc">
+              Want to see what this website looked like before? check it out here:
+            </p>
+
+            <div class="nt-btn-row">
+              <a href="legacy.html" target="_blank" rel="noopener noreferrer" class="nt-btn">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>Legacy Site
+              </a>
+              <button class="nt-btn" id="toggleLegacyPreviewBtn" onclick="toggleLegacyFrame()">
+                <i class="fa-solid fa-desktop"></i> <span id="legacyPreviewBtnLabel">Embedded Preview</span>
+              </button>
+            </div>
+
+            <!-- Embedded Interactive Browser Frame for Legacy View -->
+            <div id="legacyFrameContainer" style="display: none; border-top: 2px solid var(--border-darker); border-left: 2px solid var(--border-darker); border-right: 2px solid var(--border-light); border-bottom: 2px solid var(--border-light); background: #000000; margin-top: 14px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 4px 8px; background: var(--win-bg); border-bottom: 1px solid var(--border-dark); font-size: 0.75rem;">
+                <span style="font-family: var(--font-mono); font-weight: bold;">
+                  <i class="fa-solid fa-window-restore"></i> preview://legacy.html
+                </span>
+                <button class="nt-win-btn" onclick="toggleLegacyFrame()" title="Close Frame">×</button>
+              </div>
+              <iframe id="legacyIframe" data-src="legacy.html" style="width: 100%; height: 500px; border: none; display: block;" title="Legacy Website View"></iframe>
+            </div>
+          </div>
+
+          <div class="nt-statusbar">
+            <div class="nt-status-panel flex-fill">source: Git HEAD</div>
+            <div class="nt-status-panel">archive: read-only</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Contact Section Window -->
+      <section id="contact">
+        <article class="nt-window">
+          <div class="nt-titlebar">
+            <div class="nt-titlebar-left">
+              <i class="fa-regular fa-envelope nt-titlebar-icon"></i>
+              <span>contact.cfg</span>
+            </div>
+            <div class="nt-titlebar-controls">
+              <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
+              <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+            </div>
+          </div>
+
+          <div class="nt-window-content">
+            <p class="hero-desc">
+              Feel free to reach out for Linux stuff, Hyprland configs, software collaboration, or music recommendations:
+            </p>
+
+            <div class="contact-links-grid">
+              <a href="mailto:anik@redpilllabs.in" 
+                 class="contact-tile" 
+                 onclick="copyEmail('anik@redpilllabs.in', event)"
+                 title="Click to copy email address">
+                <i class="fa-regular fa-envelope" style="font-size: 1.2rem;"></i>
+                <div>
+                  <div style="font-weight: 800; font-size: 0.85rem;">Email</div>
+                  <div style="font-size: 0.78rem; color: var(--text-dim);">anik@redpilllabs.in</div>
+                </div>
+              </a>
+
+              <a href="https://github.com/Anik200" target="_blank" rel="noopener noreferrer" class="contact-tile">
+                <i class="fa-brands fa-github" style="font-size: 1.2rem;"></i>
+                <div>
+                  <div style="font-weight: 800; font-size: 0.85rem;">GitHub</div>
+                  <div style="font-size: 0.78rem; color: var(--text-dim);">@Anik200</div>
+                </div>
+              </a>
+
+              <a href="https://steamcommunity.com/id/myh3/" target="_blank" rel="noopener noreferrer" class="contact-tile">
+                <i class="fa-brands fa-steam" style="font-size: 1.2rem;"></i>
+                <div>
+                  <div style="font-weight: 800; font-size: 0.85rem;">Steam Profile</div>
+                  <div style="font-size: 0.78rem; color: var(--text-dim);">myhem (@myh3)</div>
+                </div>
+              </a>
+
+              <a href="https://discord.gg/pp7jYp752g" target="_blank" rel="noopener noreferrer" class="contact-tile">
+                <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i>
+                <div>
+                  <div style="font-weight: 800; font-size: 0.85rem;">Discord</div>
+                  <div style="font-size: 0.78rem; color: var(--text-dim);">Join server</div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="nt-statusbar">
+            <div class="nt-status-panel flex-fill">online</div>
+            <div class="nt-status-panel">email: anik@redpilllabs.in</div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div class="site-footer-copy">&copy; 2025-2026 Anik Biswas</div>
+        <div class="site-footer-sub">Built with HTML, CSS &amp; vanilla JS · Monochrome Minimal UI</div>
+      </div>
+    </footer>
   </div>
 
-  <header>
-    <div class="container">
-      <h1 id="typed-heading"></h1>
-      <p class="tagline">My personal blog about tech, life, and thoughts.</p>
-      <nav>
-        <a href="#blog">Blog</a>
-        <a href="#about">About</a>
-        <a href="code_index.html" target="_blank">Code Index</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
-  </header>
+  <!-- Back to Top Button -->
+  <button id="back-to-top" title="Back to top" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
 
-  <main class="container">
-  <div class="headline">About Me</div>
-  <article class="post">
-  <h3><i class="fas fa-hand-peace"></i> Hi, i am Anik</h3>
-      <p>a random guy from <span style="text-decoration: underline;">West Bengal <i class="fas fas fa-map-marker-alt"></i>, India.</span> I'm a student, Linux enthusiast, and lover of minimal aesthetics. This blog is a place for my ideas, setups, and occasional rants.</p>
-    </article>
-    
-    <section id="blog">
-      <div class="headline">Latest Posts</div>
-    <article class="post" onclick="togglePost(this)">
-  <h3><i class="fas fa-bicycle"></i> I recently went on a cycling trip with a friend, had a burst of dopamine throughout the ride, pure fun.</h3>
-      <p>cycling had been my way of getting a hold of fun while keeping myself fit throughout my life, here is a view of a few places i visited...</p>
-      <div class="expanded-content">
-      <a href="./img/image1.jpg" data-lightbox="cycling"><img src="./img/image1.jpg"></a><a href="./img/image2.jpg" data-lightbox="cycling"><img src="./img/image2.jpg"></a><a href="./img/image3.jpg" data-lightbox="cycling"><img src="./img/image3.jpg"></a><a href="./img/image4.jpg" data-lightbox="cycling"><img src="./img/image4.jpg"></a></div>
-    </article>
-      <article class="post">
-        <h3><i class="fas fa-music"></i> My Way Of Listening To Music</h3>
-        <p class="date">May 11, 2025</p>
-        <p>I like to have my music in my device locally unlike others streaming their favourite music from apps, I like to use Seeker to Download lossless music and listen to them using Poweramp.</p>
-      </article>
-      <article class="post">
-        <h3><i class="fas fa-rocket"></i> Launching My Blog</h3>
-        <p class="date">May 10, 2025</p>
-        <p>Today I decided to finally start writing about my experiences with Linux, development, and personal projects...</p>
-      </article>
-  <article class="post" onclick="togglePost(this)">
-  <h3><i class="fas fa-desktop"></i> My Hyprland Setup</h3>
-  <p class="date">May 8, 2025</p>
-  <p class="preview">I recently customized my Hyprland config and it's never felt better. Here's how I did it...</p>
-  
-  <div class="expanded-content">
-    <p>Here’s the detailed guide to my setup! I’ll explain how I modified my configuration files, what tools I used, and the steps to get everything working smoothly on my machine.</p>
-    <p>
-      <i class="fas fa-arrow-right"></i>
-      You can check out all the configuration files in my 
-      <a href="https://github.com/Anik200/dotfiles" target="_blank" rel="noopener noreferrer">dotfiles repository</a>.
-    </p>
-  </div>
-</article>
+  <!-- Retro Dialog Box Toast -->
+  <div id="copy-toast"></div>
 
-    </section>
-    <section id="contact">
-      <div class="headline">Contact</div>
-      <p>You can reach me at <a href="mailto:myhem@t-online.de">myhem@t-online.de</a> or on <a href="https://github.com/Anik200" target="_blank"><i class="fab fa-github"></i> GitHub</a>.</p>
-    </section>
-  </main>
+  <!-- Lightbox2 (with jQuery bundled) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 myhem. Built with <i class="fas fa-laptop-code"></i> and <i class="fas fa-mug-hot"></i>.</p>
-    </div>
-  </footer>
-
+  <!-- Application Logic -->
   <script src="script.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
-  
 </body>
 </html>

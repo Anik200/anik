@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Legacy View (v1.0) · Anik's Blog</title>
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Martian+Mono:wght@100..800&display=swap" rel="stylesheet">
+
+  <style>
+    /* Legacy Archive Notification Banner */
+    .legacy-banner {
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      background: linear-gradient(90deg, #1e293b, #0f172a);
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1.25rem;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #38bdf8;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .legacy-exit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #38bdf8;
+      color: #0f172a;
+      text-decoration: none;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      transition: background 0.2s ease;
+    }
+
+    .legacy-exit-btn:hover {
+      background: #7dd3fc;
+    }
+
+    /* Original Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      transition: background-color 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 60%),
+                  linear-gradient(135deg, #55D9F6, #388297);
+      transition: background-image 1s ease;
+      pointer-events: none;
+    }
+
+    /* Themes */
+    body.light {
+      color: #222;
+      background-color: #fff;
+    }
+    body.dark {
+      color: #eee;
+      background-color: #0a0a0a;
+    }
+    body.light a {
+      color: #0077aa;
+    }
+    body.dark a {
+      color: #66ddee;
+    }
+
+    /* Dock Panel */
+    #dock-panel {
+      position: fixed;
+      top: 2.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.5rem 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(6px);
+      border-radius: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: white;
+      border: 2px solid rgba(100, 255, 255, 0.2);
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+      opacity: 1;
+      transition: all 0.6s ease;
+      z-index: 100;
+    }
+
+    #dock-panel.collapsed {
+      transform: translateX(-50%);
+      width: 1%;
+      opacity: 0;
+    }
+
+    #dock-panel.expanded {
+      opacity: 1;
+      transform: translateX(-50%);
+      width: 80%;
+      transition: 1s ease;
+    }
+
+    #theme-toggle {
+      transform: translateX(0%);
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 6rem auto 2rem auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+    }
+
+    .tagline {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      opacity: 0.7;
+    }
+
+    nav {
+      margin-top: 1rem;
+    }
+
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    section h2 {
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.3rem;
+    }
+
+    .post {
+      text-decoration: none;
+      margin-bottom: 2rem;
+      padding: 1.2rem;
+      border-radius: 1.5rem;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(6px);
+      border: 2px solid rgba(100, 255, 255, 0.15);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .post:hover {
+      transform: translateY(-5px);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .post h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .date {
+      font-size: 0.85rem;
+      opacity: 0.6;
+      margin-bottom: 0.5rem;
+    }
+
+    .post p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    section#about,
+    section#contact {
+      margin-top: 2rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+
+    .expanded-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+    }
+
+    .expanded-content.visible {
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    .headline {
+      text-decoration: none;
+      background: rgba(0, 0, 0, 0.0);
+      backdrop-filter: blur(6px); 
+      font-weight: bold;
+      font-size: 25px;
+      padding: 23px 23px 23px 32px;
+    }
+
+    .mug, .dock-discord {
+      color: white;
+      font-size: 23px;
+    }
+
+    img {
+      margin: 10px;
+      border-radius: 23px;
+      border: 4px solid rgba(100, 255, 255, 0.2);
+      width: 100px;
+    }
+
+    img:hover {
+      width: 210px;
+      transition: 1s ease;
+    }
+
+    #typed-heading::after {
+      content: "|";
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="light">
+  <!-- Time Capsule Banner -->
+  <div class="legacy-banner">
+    <div>
+      <i class="fas fa-history" style="color: #38bdf8; margin-right: 0.4rem;"></i>
+      <strong>Legacy View (v1.0 Archive)</strong> — Original design &amp; layout from May 2025
+    </div>
+    <a href="index.html" class="legacy-exit-btn">
+      <i class="fas fa-arrow-left"></i> Modern Site
+    </a>
+  </div>
+
+  <div id="background"></div>
+
+  <!-- Floating Dock Panel -->
+  <div id="dock-panel" class="collapsed">
+    <a href="https://www.youtube.com/watch?embeds_referring_euri=https%3A%2F%2Flichess.org%2F&source_ve_path=Mjg2NjQsMTY0NTAz&v=j5a0jTc9S10&feature=youtu.be" target="_blank">
+      <span class="mug"><i class="fa-solid fa-mug-hot" title="Special Button"></i></span>
+    </a>
+    <span class="dock-discord">
+      <a href="https://discord.gg/pp7jYp752g" target="_blank" title="Join my Discord server" class="dock-discord">
+        <i class="fab fa-discord" style="color: white;"></i>
+      </a>
+    </span>
+    <button id="theme-toggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
+  </div>
+
+  <header>
+    <div class="container">
+      <h1 id="typed-heading"></h1>
+      <p class="tagline">My personal blog about tech, life, and thoughts.</p>
+      <nav>
+        <a href="#blog">Blog</a>
+        <a href="#about">About</a>
+        <a href="index.html">Modern View</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="headline">About Me</div>
+    <article class="post">
+      <h3><i class="fas fa-hand-peace"></i> Hi, i am Anik</h3>
+      <p>a random guy from <span style="text-decoration: underline;">West Bengal <i class="fas fa-map-marker-alt"></i>, India.</span> I'm a student, Linux enthusiast, and lover of minimal aesthetics. This blog is a place for my ideas, setups, and occasional rants.</p>
+    </article>
+    
+    <section id="blog">
+      <div class="headline">Latest Posts</div>
+      <article class="post" onclick="togglePost(this)">
+        <h3><i class="fas fa-bicycle"></i> I recently went on a cycling trip with a friend, had a burst of dopamine throughout the ride, pure fun.</h3>
+        <p>cycling had been my way of getting a hold of fun while keeping myself fit throughout my life, here is a view of a few places i visited...</p>
+        <div class="expanded-content">
+          <a href="./img/image1.jpg" data-lightbox="cycling"><img src="./img/image1.jpg"></a>
+          <a href="./img/image2.jpg" data-lightbox="cycling"><img src="./img/image2.jpg"></a>
+          <a href="./img/image3.jpg" data-lightbox="cycling"><img src="./img/image3.jpg"></a>
+          <a href="./img/image4.jpg" data-lightbox="cycling"><img src="./img/image4.jpg"></a>
+        </div>
+      </article>
+      
+      <article class="post">
+        <h3><i class="fas fa-music"></i> My Way Of Listening To Music</h3>
+        <p class="date">May 11, 2025</p>
+        <p>I like to have my music in my device locally unlike others streaming their favourite music from apps, I like to use Seeker to Download lossless music and listen to them using Poweramp.</p>
+      </article>
+
+      <article class="post">
+        <h3><i class="fas fa-rocket"></i> Launching My Blog</h3>
+        <p class="date">May 10, 2025</p>
+        <p>Today I decided to finally start writing about my experiences with Linux, development, and personal projects...</p>
+      </article>
+
+      <article class="post" onclick="togglePost(this)">
+        <h3><i class="fas fa-desktop"></i> My Hyprland Setup</h3>
+        <p class="date">May 8, 2025</p>
+        <p class="preview">I recently customized my Hyprland config and it's never felt better. Here's how I did it...</p>
+        
+        <div class="expanded-content">
+          <p>Here’s the detailed guide to my setup! I’ll explain how I modified my configuration files, what tools I used, and the steps to get everything working smoothly on my machine.</p>
+          <p>
+            <i class="fas fa-arrow-right"></i>
+            You can check out all the configuration files in my 
+            <a href="https://github.com/Anik200/dotfiles" target="_blank" rel="noopener noreferrer">dotfiles repository</a>.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <section id="contact">
+      <div class="headline">Contact</div>
+      <p>You can reach me at <a href="mailto:anik@redpilllabs.in">anik@redpilllabs.in</a> or on <a href="https://github.com/Anik200" target="_blank"><i class="fab fa-github"></i> GitHub</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 myhem. Built with <i class="fas fa-laptop-code"></i> and <i class="fas fa-mug-hot"></i>.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
+  
+  <script>
+    // Original Legacy Script
+    const background = document.getElementById('background');
+    const toggleBtn = document.getElementById('theme-toggle');
+    const body = document.body;
+    const dockPanel = document.getElementById('dock-panel');
+
+    function updateGradient() {
+      const isDark = body.classList.contains('dark');
+      const linear = isDark
+        ? 'linear-gradient(135deg, #0C191F, #146d87)'
+        : 'linear-gradient(135deg, #55D9F6, #0e3d4a)';
+      background.style.backgroundImage = linear;
+    }
+
+    function toggleTheme() {
+      body.classList.toggle('dark');
+      body.classList.toggle('light');
+      toggleBtn.innerHTML = body.classList.contains('dark')
+        ? '<i class="fas fa-sun"></i>'
+        : '<i class="fas fa-moon"></i>';
+      updateGradient();
+    }
+
+    function togglePost(postElement) {
+      const content = postElement.querySelector('.expanded-content');
+      if (!content) return;
+      content.classList.toggle('visible');
+    }
+
+    function setThemeBasedOnSystem() {
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) {
+        body.classList.add('dark');
+        body.classList.remove('light');
+        toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        body.classList.add('light');
+        body.classList.remove('dark');
+        toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+      }
+    }
+
+    function typeText(elementId, text, speed = 100) {
+      const element = document.getElementById(elementId);
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
+    }
+
+    function updateCursorGradient(x, y) {
+      const xPercent = (x / window.innerWidth) * 100;
+      const yPercent = (y / window.innerHeight) * 100;
+      const isDark = body.classList.contains('dark');
+      const glowColor = isDark ? 'rgba(0, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.15)';
+      const radial = `radial-gradient(circle at ${xPercent}% ${yPercent}%, ${glowColor}, transparent 60%)`;
+      const linear = isDark ? 'linear-gradient(135deg, #0C191F, #146d87)' : 'linear-gradient(135deg, #55D9F6, #0e3d4a)';
+      background.style.backgroundImage = `${radial}, ${linear}`;
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      updateCursorGradient(e.clientX, e.clientY);
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        updateCursorGradient(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setThemeBasedOnSystem();
+      updateGradient();
+
+      dockPanel.classList.add('collapsed');
+      void dockPanel.offsetWidth;
+      setTimeout(() => {
+        dockPanel.classList.remove('collapsed');
+        dockPanel.classList.add('expanded');
+      }, 100);
+
+      typeText("typed-heading", "Anik Biswas", 120);
+      toggleBtn.addEventListener('click', toggleTheme);
+    });
+  </script>
+</body>
+</html>

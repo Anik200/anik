@@ -1,258 +1,1559 @@
-/* Font Faces (assuming fonts are included correctly in your project) */
-@font-face {
-  font-family: 'JetBrainsMonoNF';
-  src: url('./fonts/JetBrainsMonoNerdFont-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'JetBrainsMonoNF';
-  src: url('./fonts/JetBrainsMonoNerdFont-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-display: swap;
+/* ==========================================================================
+   Anik's Website - Windows NT 4.0 / 2000 Monochrome Design System
+   Strictly Zero Corner Roundings, Glassmorphism with Blur & 2.5D Rainy City
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Monochrome Theme Tokens
+   -------------------------------------------------------------------------- */
+:root {
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Arial, sans-serif;
+
+  /* Slightly rounded corner radius tokens */
+  --radius-lg: 10px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xs: 4px;
+
+  /* Base glass settings */
+  --glass-blur: 3px;
+  --glass-opacity: 0.30;
 }
 
-* {
+/* Box sizing & tap highlight reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus,
+button:active,
+a:focus,
+a:active {
+  outline: none;
+}
+
+/* Dark Monochrome (Default Minimal Dark) */
+body.dark {
+  --bg-desktop: #020304;
+  --win-bg: #0d0d0d;
+  --win-bg-glass: rgba(0, 0, 0, var(--glass-opacity));
+  --win-surface: #141414;
+  --win-client: rgba(0, 0, 0, 0.45);
+  
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-border-hover: rgba(255, 255, 255, 0.16);
+  --border-light: rgba(255, 255, 255, 0.12);
+  --border-lighter: rgba(255, 255, 255, 0.18);
+  --border-dark: rgba(255, 255, 255, 0.06);
+  --border-darker: rgba(0, 0, 0, 0.6);
+
+  --titlebar-bg: rgba(0, 0, 0, 0.45);
+  --titlebar-border: rgba(255, 255, 255, 0.06);
+  --titlebar-text: #f0f0f0;
+  --titlebar-icon: #888888;
+
+  --text-main: #f0f0f0;
+  --text-sub: #9e9e9e;
+  --text-dim: #606060;
+  --text-highlight: #ffffff;
+
+  --btn-bg: rgba(255, 255, 255, 0.04);
+  --btn-hover: rgba(255, 255, 255, 0.1);
+  --btn-active: rgba(255, 255, 255, 0.06);
+
+  --tag-bg: rgba(255, 255, 255, 0.04);
+  --tag-border: rgba(255, 255, 255, 0.08);
+
+  --tray-bg: transparent;
+  --rain-color: 255, 255, 255;
+}
+
+/* Light Monochrome (Clean, Crisp & Bright Light Scheme) */
+body.light {
+  --bg-desktop: #eef2f6;
+  --win-bg: #ffffff;
+  --win-bg-glass: rgba(255, 255, 255, 0.85);
+  --win-surface: #f8fafc;
+  --win-client: rgba(241, 245, 249, 0.95);
+
+  --card-border: rgba(0, 0, 0, 0.10);
+  --card-border-hover: rgba(0, 0, 0, 0.22);
+  --border-light: rgba(0, 0, 0, 0.08);
+  --border-lighter: rgba(0, 0, 0, 0.12);
+  --border-dark: rgba(0, 0, 0, 0.08);
+  --border-darker: rgba(0, 0, 0, 0.20);
+
+  --titlebar-bg: rgba(255, 255, 255, 0.92);
+  --titlebar-border: rgba(0, 0, 0, 0.08);
+  --titlebar-text: #0f172a;
+  --titlebar-icon: #475569;
+
+  --text-main: #0f172a;
+  --text-sub: #475569;
+  --text-dim: #64748b;
+  --text-highlight: #000000;
+
+  --btn-bg: rgba(0, 0, 0, 0.05);
+  --btn-hover: rgba(0, 0, 0, 0.10);
+  --btn-active: rgba(0, 0, 0, 0.15);
+
+  --tag-bg: rgba(0, 0, 0, 0.05);
+  --tag-border: rgba(0, 0, 0, 0.12);
+
+  --tray-bg: transparent;
+  --rain-color: 90, 105, 125;
+}
+
+/* --------------------------------------------------------------------------
+   Base & Reset
+   -------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  font-family: 'JetBrainsMonoNF', 'JetBrains Mono', 'Fira Code', monospace;
-  transition: background-color 0.3s, color 0.3s;
+  font-family: var(--font-mono);
+  background-color: var(--bg-desktop);
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.6;
   overflow-x: hidden;
+  transition: background-color var(--anim-normal), color var(--anim-normal);
+  -webkit-font-smoothing: antialiased;
 }
 
-#background {
+/* Global Image Containment (prevents blowouts) */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   2.5D Rainy Cityscape Animated Canvas
+   -------------------------------------------------------------------------- */
+#rain-canvas {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: -1;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 60%),
-              linear-gradient(135deg, #55D9F6, #388297);
-  transition: background-image 1s ease;
   pointer-events: none;
+  background-color: var(--bg-desktop);
+  display: block;
 }
 
-/* Themes */
-body.light {
-  color: #222;
-  background-color: #fff;
-}
-body.dark {
-  color: #eee;
-  background-color: #0a0a0a;
-}
-body.light a {
-  color: #0077aa;
-}
-body.dark a {
-  color: #66ddee;
-}
-
-/* Dock Panel */
-#dock-panel {
+/* --------------------------------------------------------------------------
+   Top Bar / Dock (Pitch Black Glass, No Border Elements, Hover Bright)
+   -------------------------------------------------------------------------- */
+#nt-taskbar {
   position: fixed;
-  top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 0.5rem 1rem;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-  border-radius: 2rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  color: white;
-  border: 2px solid rgba(100, 255, 255, 0.2);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  opacity: 1;
-  transition: all 0.6s ease;
-  z-index: 100;
-}
-
-#dock-panel.collapsed {
-  transform: translateX(-50%);
-  width: 1%;
-  opacity: 0;
-}
-
-#dock-panel.expanded {
-  opacity: 1;
-  transform: translateX(-50%);
-  width: 80%;
-   transition: 1s ease;
-}
-
-#theme-toggle {
- transform: translateX(0%);
-  background: none;
+  justify-content: space-between;
+  padding: 0 24px;
+  background-color: rgba(0, 0, 0, 0.90); /* Pitch black & more opaque than cards */
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   border: none;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
-.logo {
-  font-size: 1.2rem;
+.taskbar-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
 
-/* Main Content */
-.container {
-  width: 90%;
-  max-width: 800px;
-  margin: 6rem auto 2rem auto;
+.taskbar-divider {
+  display: none !important;
 }
 
-header {
-  text-align: center;
-  margin-bottom: 2rem;
+.taskbar-tasks {
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
-header h1 {
-  font-size: 2.5rem;
-}
-
-.tagline {
-  margin-top: 0.5rem;
-  font-size: 1rem;
-  opacity: 0.7;
-}
-
-nav {
-  margin-top: 1rem;
-}
-
-nav a {
-  margin: 0 1rem;
+/* Elements in the bar: NO border, plain text, bright on hover only */
+.nt-start-btn,
+.nt-task-item,
+.tray-btn,
+#tray-clock {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  padding: 4px 2px !important;
+  height: auto !important;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 500;
   text-decoration: none;
-  font-weight: bold;
-}
-
-/* Section Headings */
-section h2 {
-  margin-bottom: 1rem;
-  font-size: 1.4rem;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 0.3rem;
-}
-
-/* Blog Post Cards */
-.post {
-  text-decoration: none;
-  margin-bottom: 2rem;
-  padding: 1.2rem;
-  border-radius: 1.5rem;
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(6px);
-  border: 2px solid rgba(100, 255, 255, 0.15);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.post-link {
- text-decoration: none;
+  color: #777777 !important;
+  transition: color 0.15s ease;
   cursor: pointer;
-  transition: background 0.2s ease;
 }
 
-.post-clickable {
- text-decoration: none;
- color: black;
-  cursor: pointer;
-  transition: background 0.2s ease;
+.nt-start-btn:focus,
+.nt-start-btn:active,
+.nt-start-btn:focus-visible,
+.nt-task-item:focus,
+.nt-task-item:active,
+.nt-task-item:focus-visible,
+.tray-btn:focus,
+.tray-btn:active,
+.tray-btn:focus-visible,
+#theme-toggle:focus,
+#theme-toggle:active,
+#theme-toggle:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-
-.post:hover {
-  transform: translateY(-5px);
-  background: rgba(0, 0, 0, 0.3);
+.nt-task-item i,
+.nt-start-btn i {
+  display: none;
 }
 
-
-.post h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.3rem;
+.nt-start-btn {
+  font-weight: 700;
+  color: #888888 !important;
+  letter-spacing: -0.01em;
 }
 
-.date {
+/* Bright on hover only */
+.nt-start-btn:hover,
+.nt-task-item:hover,
+.tray-btn:hover {
+  color: #ffffff !important;
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.nt-task-item.active {
+  color: #ffffff !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.taskbar-tray {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  height: auto;
+  padding: 0;
+}
+
+.tray-btn {
   font-size: 0.85rem;
-  opacity: 0.6;
-  margin-bottom: 0.5rem;
 }
 
-.post p {
-  font-size: 0.95rem;
-  line-height: 1.5;
+#tray-clock {
+  color: #666666 !important;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: default;
 }
 
-/* About & Contact Sections */
-section#about,
-section#contact {
-  margin-top: 2rem;
+/* --------------------------------------------------------------------------
+   Container
+   -------------------------------------------------------------------------- */
+.container {
+  width: 94%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 55px 0 40px 0;
 }
 
-footer {
-  text-align: center;
-  padding: 2rem 0;
-  font-size: 0.9rem;
-  opacity: 0.6;
-}
-
-.expanded-content {
-   max-height: 0;
-  opacity: 0;
+/* --------------------------------------------------------------------------
+   Minimal Black Glass Cards (Slightly Rounded Corners, Same Blur & Opacity)
+   -------------------------------------------------------------------------- */
+.nt-window {
+  margin-bottom: 2rem;
+  background-color: var(--win-bg-glass);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  transition: max-height 0.4s ease, opacity 0.4s ease;
+  transition: border-color var(--anim-fast), box-shadow var(--anim-fast);
 }
 
-.expanded-content.visible {
-  max-height: 500px; /* Adjust depending on your content */
-  opacity: 1;
+.nt-window:hover {
+  border-color: var(--card-border-hover);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7);
 }
 
-.headline {
-text-decoration: none;
-background: rgba(0, 0, 0, 0.0);
-backdrop-filter: blur(6px); 
-font-weight: bold;
-font-size: 25px;
-padding-left: 32px;
-padding-right: 23px;
-padding-bottom: 23px;
-padding-top: 23px;
+.nt-titlebar {
+  height: 38px;
+  background: var(--titlebar-bg);
+  border-bottom: 1px solid var(--titlebar-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  user-select: none;
 }
 
-.mug {
-color: white;
-font-size: 23px;
+.nt-titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--titlebar-text);
+  font-weight: 600;
+  font-size: 0.84rem;
+  letter-spacing: 0.02em;
 }
 
-.dock-discord {
-color: white;
-font-size: 23px;
-}
-img {
-margin: 10px;
-border-radius: 23px;
-border: 4px solid rgba(100, 255, 255, 0.2);
-width: 100px;
+.nt-titlebar-icon {
+  font-size: 0.85rem;
+  color: var(--titlebar-icon);
 }
 
-img:hover {
-width: 210px;
-transition: 1s ease;
+/* Hide Windows NT retro window buttons, menubars, and statusbars */
+.nt-titlebar-controls,
+.nt-menubar,
+.nt-statusbar {
+  display: none !important;
 }
 
-#typed-heading::after {
-  content: "|";
-  animation: blink 1s infinite;
+.nt-window-content {
+  padding: 22px;
+  overflow: hidden;
+}
+
+.nt-client-box {
+  background-color: var(--win-client);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  color: var(--text-main);
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   Hero Window & STABLE Non-Jittering Typewriter Box
+   -------------------------------------------------------------------------- */
+.hero-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid var(--border-dark);
+  background: var(--tag-bg);
+  color: var(--text-main);
+  margin-bottom: 12px;
+}
+
+/* Fixed height to PREVENT window expansion / jittering as text rewrites */
+.hero-type-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 3.2rem;
+  min-height: 3.2rem;
+  max-height: 3.2rem;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-bottom: 8px;
+}
+
+.hero-prompt {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-main);
+  flex-shrink: 0;
+}
+
+#typed-heading {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text-main);
+  display: inline-block;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.cursor-caret {
+  display: inline-block;
+  color: var(--text-main);
+  font-weight: 300;
+  animation: blink 0.8s infinite step-start;
+  flex-shrink: 0;
 }
 
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+.hero-desc {
+  font-size: 0.94rem;
+  color: var(--text-sub);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+/* Minimal Rounded Buttons */
+.nt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  background: rgba(255, 255, 255, 0.04);
+  text-decoration: none;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+  cursor: pointer;
+  transition: all var(--anim-fast);
+  white-space: nowrap;
+}
+
+.nt-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--card-border-hover);
+  color: #ffffff;
+}
+
+.nt-btn:active {
+  transform: scale(0.98);
+}
+
+.nt-btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   GitHub Projects Showcase (Minimal Black Cards)
+   -------------------------------------------------------------------------- */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.project-card {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden !important;
+  transition: border-color var(--anim-fast), background var(--anim-fast);
+}
+
+.project-card:hover {
+  border-color: var(--card-border-hover);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.project-preview-wrap {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 155px !important;
+  aspect-ratio: 16 / 9;
+  background: #000000;
+  overflow: hidden !important;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  position: relative;
+  box-sizing: border-box;
+}
+
+.project-preview-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: var(--radius-sm);
+  filter: grayscale(100%) contrast(110%);
+  transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.project-card:hover .project-preview-wrap img {
+  filter: grayscale(0%) contrast(100%);
+  transform: scale(1.05);
+}
+
+.project-badge {
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  background: var(--tag-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xs);
+  color: var(--text-dim);
+}
+
+.project-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.project-desc {
+  font-size: 0.8rem;
+  color: var(--text-sub);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   Photo Gallery Grid (Minimal Rounded Frames)
+   -------------------------------------------------------------------------- */
+.photo-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.gallery-card {
+  position: relative;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 110px !important;
+  aspect-ratio: 4 / 3;
+  overflow: hidden !important;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+  background: #000000;
+  text-decoration: none;
+  transition: border-color var(--anim-fast), transform var(--anim-fast);
+}
+
+.gallery-card:hover {
+  border-color: var(--card-border-hover);
+  transform: translateY(-2px);
+}
+
+.gallery-card img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: var(--radius-sm);
+  filter: grayscale(100%) contrast(110%);
+  transition: transform 0.4s ease, filter 0.3s ease;
+  border: none;
+  margin: 0;
+}
+
+.gallery-card:hover img {
+  filter: grayscale(0%) contrast(100%);
+  transform: scale(1.06);
+}
+
+.gallery-overlay-badge {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-xs);
+  padding: 2px 6px;
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity var(--anim-fast);
+}
+
+.gallery-card:hover .gallery-overlay-badge {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Accordion / Expandable Post Content
+   -------------------------------------------------------------------------- */
+.accordion-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--anim-collapse);
+}
+
+.accordion-wrapper.expanded {
+  grid-template-rows: 1fr;
+}
+
+.accordion-content {
+  overflow: hidden;
+}
+
+.expanded-inner {
+  padding-top: 12px;
+  margin-top: 12px;
+  border-top: 1px dashed var(--border-dark);
+}
+
+/* --------------------------------------------------------------------------
+   Monochrome Lossless Music Equalizer
+   -------------------------------------------------------------------------- */
+.music-player-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.music-vinyl-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Vinyl record and album circle override zero radius */
+.spinning-vinyl,
+.spinning-vinyl *,
+.spinning-vinyl::before,
+.spinning-vinyl::after,
+.vinyl-album-art,
+.vinyl-center-hole {
+  border-radius: 50% !important;
+}
+
+.spinning-vinyl {
+  width: 52px;
+  height: 52px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: spinSlow 6s linear infinite;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: #000000;
+}
+
+.spinning-vinyl.paused {
+  animation-play-state: paused !important;
+}
+
+.vinyl-album-art {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.vinyl-center-hole {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #000000;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50% !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.music-info {
+  flex-grow: 1;
+}
+
+.music-title {
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: var(--text-main);
+}
+
+.music-artist {
+  font-size: 0.78rem;
+  color: var(--text-sub);
+}
+
+.audio-equalizer {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+}
+
+.audio-bar {
+  width: 4px;
+  background: var(--text-main);
+  animation: soundBars 1s ease-in-out infinite alternate;
+}
+
+.audio-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; }
+.audio-bar:nth-child(2) { height: 95%; animation-delay: 0.3s; }
+.audio-bar:nth-child(3) { height: 60%; animation-delay: 0.15s; }
+.audio-bar:nth-child(4) { height: 80%; animation-delay: 0.4s; }
+.audio-bar:nth-child(5) { height: 50%; animation-delay: 0.25s; }
+
+@keyframes soundBars {
+  0% { height: 20%; }
+  100% { height: 100%; }
+}
+
+.tech-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tech-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  background: var(--tag-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xs);
+  color: var(--text-sub);
+  font-size: 0.74rem;
+  transition: all var(--anim-fast);
+}
+
+.tech-tag:hover {
+  border-color: var(--card-border-hover);
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   Hyprland Terminal Preview
+   -------------------------------------------------------------------------- */
+.terminal-window {
+  background: #000000;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: #111111;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: #888888;
+  font-size: 0.72rem;
+}
+
+.terminal-body {
+  padding: 12px 16px;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+.terminal-prompt {
+  color: #888888;
+  margin-right: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   Contact Links Grid
+   -------------------------------------------------------------------------- */
+.contact-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.contact-tile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 0.88rem;
+  transition: all var(--anim-fast);
+}
+
+.contact-tile:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--card-border-hover);
+  color: #ffffff;
+}
+
+.contact-tile:active {
+  transform: scale(0.99);
+}
+
+/* --------------------------------------------------------------------------
+   Notification Toast
+   -------------------------------------------------------------------------- */
+#copy-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translate(-50%, 60px);
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: var(--text-main);
+  padding: 8px 18px;
+  border: 1px solid var(--card-border-hover);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all var(--anim-normal);
+  z-index: 9999;
+}
+
+#copy-toast.visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Scrollbar (Minimal Dark)
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   Back to Top Button (Minimal Round Button)
+   -------------------------------------------------------------------------- */
+#back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 38px;
+  height: 38px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50% !important;
+  color: var(--text-sub);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--anim-normal);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  z-index: 990;
+}
+
+#back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#back-to-top:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+#back-to-top:active {
+  transform: scale(0.95);
+}
+
+#back-to-top:focus,
+#back-to-top:focus-visible {
+  outline: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   Steam Profile Window Card (Minimal Black Card)
+   -------------------------------------------------------------------------- */
+.steam-profile-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.steam-header-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.steam-avatar-wrap {
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  background: #000000;
+  flex-shrink: 0;
+  overflow: hidden !important;
+  box-shadow: none;
+}
+
+.steam-avatar-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: var(--radius-md);
+  filter: grayscale(100%) contrast(110%);
+  transition: filter var(--anim-fast);
+}
+
+.steam-avatar-wrap:hover img {
+  filter: grayscale(0%);
+}
+
+.steam-user-meta {
+  flex-grow: 1;
+}
+
+.steam-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.steam-persona-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.steam-level-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xs);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+}
+
+.steam-status-line {
+  font-size: 0.78rem;
+  color: #c7ccc9;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.steam-quote-box {
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  padding: 10px 14px;
+  border: 1px solid var(--card-border);
+  border-left: 3px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-xs);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.steam-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.steam-stat-card {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 4px;
+  text-align: center;
+  transition: border-color var(--anim-fast);
+}
+
+.steam-stat-card:hover {
+  border-color: var(--card-border-hover);
+}
+
+.steam-stat-number {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.steam-stat-label {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.steam-games-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.steam-game-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xs);
+  font-size: 0.75rem;
+  color: var(--text-sub);
+  transition: border-color var(--anim-fast);
+}
+
+.steam-game-item:hover {
+  border-color: var(--card-border-hover);
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Media Queries - Mobile UI Optimization
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 768px) {
+  /* Pinned App-Like Top Bar Dock */
+  #nt-taskbar {
+    padding: 0 12px;
+    height: 44px;
+    gap: 10px;
+    overflow: hidden; /* Prevent entire page header from shifting */
+    justify-content: space-between;
+  }
+
+  .taskbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .nt-start-btn {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #ffffff !important;
+    padding: 6px 0 !important;
+    letter-spacing: -0.01em;
+  }
+
+  /* Horizontally Swipeable Nav Items in Center */
+  .taskbar-tasks {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1;
+    min-width: 0;
+    padding: 4px 16px;
+    /* Symmetrical double-sided gradient fade mask on BOTH left and right edges */
+    mask-image: linear-gradient(to right, transparent 0%, black 16px, black calc(100% - 16px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 16px, black calc(100% - 16px), transparent 100%);
+  }
+
+  .taskbar-tasks::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nt-task-item {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    padding: 6px 2px !important;
+  }
+
+  /* Pinned Action Tray on the Right */
+  .taskbar-tray {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Hide non-essential desktop clock and coffee link to maximize screen real-estate */
+  #tray-clock,
+  .tray-coffee-btn {
+    display: none !important;
+  }
+
+  .tray-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-size: 0.88rem;
+    padding: 0 !important;
+  }
+
+  /* Container & Cards */
+  .container {
+    width: 92%;
+    padding-top: 54px;
+    padding-bottom: 30px;
+  }
+
+  .nt-window {
+    margin-bottom: 1.25rem;
+    border-radius: var(--radius-md);
+  }
+
+  .nt-titlebar {
+    height: 34px;
+    padding: 0 14px;
+    font-size: 0.78rem;
+  }
+
+  .nt-window-content {
+    padding: 16px 14px;
+  }
+
+  /* Hero Typewriter (Zero Jitter, Fits Screen) */
+  #typed-heading {
+    font-size: 1.25rem;
+  }
+
+  .hero-prompt {
+    font-size: 1.25rem;
+  }
+
+  .hero-type-row {
+    height: 2.6rem;
+    min-height: 2.6rem;
+    max-height: 2.6rem;
+  }
+
+  /* Projects & Previews */
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .project-preview-wrap {
+    height: 140px !important;
+  }
+
+  /* Photo Gallery */
+  .photo-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .gallery-card {
+    height: 95px !important;
+  }
+
+  /* Music Player */
+  .music-player-bar {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .music-vinyl-wrap,
+  .spinning-vinyl {
+    width: 48px;
+    height: 48px;
+  }
+
+  .vinyl-album-art {
+    width: 24px;
+    height: 24px;
+  }
+
+  .music-title {
+    font-size: 0.86rem;
+  }
+
+  .music-artist {
+    font-size: 0.72rem;
+  }
+
+  /* Steam Showcase */
+  .steam-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .steam-stat-card {
+    padding: 6px 2px;
+  }
+
+  .steam-stat-number {
+    font-size: 0.95rem;
+  }
+
+  .steam-avatar-wrap {
+    width: 54px;
+    height: 54px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #nt-taskbar {
+    padding: 0 10px;
+    gap: 8px;
+  }
+
+  .taskbar-left {
+    gap: 10px;
+  }
+
+  .taskbar-tasks {
+    gap: 12px;
+  }
+
+  .container {
+    width: 93%;
+    padding-top: 52px;
+  }
+
+  .nt-btn-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .nt-btn-row .nt-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 7px 12px;
+  }
+
+  .contact-links-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .contact-tile {
+    padding: 10px 12px;
+    font-size: 0.82rem;
+  }
+
+  .steam-header-row {
+    gap: 10px;
+  }
+
+  .steam-persona-name {
+    font-size: 0.95rem;
+  }
+
+  /* Keep music card uncluttered on narrow phones */
+  .audio-equalizer {
+    display: none;
+  }
+
+  #back-to-top {
+    bottom: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Site Footer (Enhanced Visibility & Minimal Backdrop Container)
+   -------------------------------------------------------------------------- */
+.site-footer {
+  margin-top: 2rem;
+  padding-bottom: 2rem;
+  text-align: center;
+}
+
+.site-footer-inner {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.site-footer-copy {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f5f5f5;
+  letter-spacing: -0.01em;
+}
+
+.site-footer-sub {
+  font-size: 0.76rem;
+  color: #a3a3a3;
+  margin-top: 3px;
+  letter-spacing: 0.01em;
+}
+
+/* --------------------------------------------------------------------------
+   Light Mode Component Overrides (Clean, Bright & Crisp)
+   -------------------------------------------------------------------------- */
+body.light #nt-taskbar {
+  background-color: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+body.light .nt-start-btn {
+  color: #1e293b !important;
+}
+
+body.light .nt-start-btn:hover {
+  color: #000000 !important;
+}
+
+body.light .nt-task-item,
+body.light .tray-btn,
+body.light #tray-clock {
+  color: #64748b !important;
+}
+
+body.light .nt-task-item:hover,
+body.light .nt-task-item.active,
+body.light .tray-btn:hover {
+  color: #0f172a !important;
+}
+
+body.light .nt-window {
+  background-color: rgba(255, 255, 255, 0.90);
+  border-color: rgba(0, 0, 0, 0.09);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+body.light .nt-window:hover {
+  border-color: rgba(0, 0, 0, 0.18);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.10);
+}
+
+body.light .nt-titlebar {
+  background: rgba(248, 250, 252, 0.95);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+body.light .nt-client-box {
+  background-color: rgba(241, 245, 249, 0.92);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light .project-card {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+body.light .project-card:hover {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(0, 0, 0, 0.20);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+body.light .project-preview-wrap {
+  background: #e2e8f0;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light .contact-tile {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.09);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+body.light .contact-tile:hover {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.22);
+  color: #000000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body.light .music-player-bar {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+body.light .spinning-vinyl {
+  background: #1e293b;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+body.light .gallery-card {
+  background: #e2e8f0;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light .steam-avatar-wrap {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+body.light .steam-quote-box {
+  background: rgba(241, 245, 249, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-left: 3px solid rgba(15, 23, 42, 0.35);
+}
+
+body.light .steam-stat-card {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light .steam-stat-card:hover {
+  border-color: rgba(0, 0, 0, 0.22);
+}
+
+body.light .steam-game-item {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: var(--text-sub);
+}
+
+body.light .steam-game-item:hover {
+  border-color: rgba(0, 0, 0, 0.22);
+  color: #000000;
+}
+
+body.light #back-to-top {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: #0f172a;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+body.light #back-to-top:hover {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.25);
+  color: #000000;
+}
+
+body.light #copy-toast {
+  background: rgba(255, 255, 255, 0.96);
+  color: #0f172a;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
+}
+
+body.light .site-footer-inner {
+  background-color: rgba(255, 255, 255, 0.88);
+  border-color: rgba(0, 0, 0, 0.09);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+body.light .site-footer-copy {
+  color: #0f172a;
+}
+
+body.light .site-footer-sub {
+  color: #475569;
+}
+
+body.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+body.light ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+body.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.32);
 }
