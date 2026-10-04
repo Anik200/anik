@@ -1538,6 +1538,7 @@
     const cardTargets = [
       { key: 'hero', getEl: () => document.querySelector('.hero-window') || document.querySelector('header.nt-window'), isStart: true },
       { key: 'about', getEl: () => document.getElementById('about') },
+      { key: 'setup', getEl: () => document.getElementById('setup') },
       { key: 'projects', getEl: () => document.getElementById('projects') },
       { key: 'blog', getEl: () => document.getElementById('blog') },
       { key: 'music', getEl: () => document.getElementById('music') },

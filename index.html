@@ -69,6 +69,7 @@
           </svg>
         </div>
         <a href="#about" class="nt-task-item task-home" data-target="about">about<span class="minimized-dot"></span></a>
+        <a href="#setup" class="nt-task-item" data-target="setup">setup<span class="minimized-dot"></span></a>
         <a href="#projects" class="nt-task-item" data-target="projects">projects<span class="minimized-dot"></span></a>
         <a href="#blog" class="nt-task-item" data-target="blog">posts<span class="minimized-dot"></span></a>
         <a href="#music" class="nt-task-item" data-target="music">music<span class="minimized-dot"></span></a>
@@ -253,6 +254,105 @@
         </article>
       </section>
 
+      <!-- Setup Section Window -->
+      <section id="setup">
+        <article class="nt-window">
+          <div class="nt-titlebar">
+            <div class="nt-titlebar-left">
+              <i class="fa-solid fa-laptop nt-titlebar-icon"></i>
+              <span>setup_specs.txt</span>
+            </div>
+            <div class="nt-titlebar-controls">
+              <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+              <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+            </div>
+          </div>
+
+          <div class="nt-menubar">
+            <span>Hardware</span>
+            <span>Peripherals</span>
+            <span>Workspace</span>
+            <span>Performance</span>
+          </div>
+
+          <div class="nt-window-content">
+            <div class="setup-layout">
+              <div class="setup-info">
+                <p class="hero-desc" style="margin-bottom: 16px;">
+                  My current workstation and gaming setup. I prefer a clean, functional environment for both programming and casual gaming.
+                </p>
+
+                <!-- Hardware Details -->
+                <div class="nt-client-box spec-box">
+                  <div class="spec-group">
+                    <div class="spec-header"><i class="fa-solid fa-microchip"></i> HP Omen 16 xd0020ax</div>
+                    <div class="spec-grid">
+                      <div class="spec-item">
+                        <span class="spec-label">CPU</span>
+                        <span class="spec-value">AMD Ryzen 7 7840HS</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-label">GPU</span>
+                        <span class="spec-value">NVIDIA RTX 4060 (8GB)</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-label">RAM</span>
+                        <span class="spec-value">16GB DDR5-5600 MHz</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-label">SSD</span>
+                        <span class="spec-value">1TB PCIe Gen4 NVMe</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-label">Display</span>
+                        <span class="spec-value">16.1" FHD IPS @ 165Hz</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="spec-group" style="margin-top: 16px;">
+                    <div class="spec-header"><i class="fa-solid fa-keyboard"></i> Peripherals</div>
+                    <div class="spec-grid">
+                      <div class="spec-item">
+                        <span class="spec-label">Keyboard</span>
+                        <span class="spec-value">Kreo Hive H75 HE</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-label">Mouse</span>
+                        <span class="spec-value">Razer DeathAdder Essential</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-label">Controller</span>
+                        <span class="spec-value">8BitDo Ultimate Wireless</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="setup-gallery-side">
+                <div class="photo-gallery-grid setup-grid-custom">
+                  <a href="./img/setup1.jpeg" data-lightbox="setup-gallery" data-title="Setup Overview" class="gallery-card setup-card-img">
+                    <img src="./img/setup1.jpeg" alt="Setup 1" loading="lazy" />
+                    <span class="gallery-overlay-badge">Main View</span>
+                  </a>
+                  <a href="./img/setup2.jpg" data-lightbox="setup-gallery" data-title="Keyboard & Mouse close-up" class="gallery-card setup-card-img">
+                    <img src="./img/setup2.jpg" alt="Setup 2" loading="lazy" />
+                    <span class="gallery-overlay-badge">Peripherals</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="nt-statusbar">
+            <div class="nt-status-panel flex-fill">hardware: optimized</div>
+            <div class="nt-status-panel">refresh: 165hz</div>
+            <div class="nt-status-panel">os: arch linux</div>
+          </div>
+        </article>
+      </section>
+
       <!-- GitHub Projects Showcase Window -->
       <section id="projects">
         <article class="nt-window">
@@ -383,6 +483,11 @@
                   <div class="project-desc">
                     Music lyric downloader with syllable-synced Apple Music TTML, word-by-word karaoke previews, and batch LRC export.
                   </div>
+                  <!-- Screenshot Preview -->
+                  <a href="img/mldlweb.png" data-lightbox="mldl-web-gallery" data-title="mldl Web App Interface" class="project-preview-wrap">
+                    <img src="img/mldlweb.png" alt="mldl Web Preview" loading="lazy" />
+                    <span class="gallery-overlay-badge"><i class="fa-solid fa-magnifying-glass"></i> Screenshot</span>
+                  </a>
                   <div class="nt-client-box" style="font-size: 0.74rem; padding: 8px; margin-top: 6px;">
                     <code>Apple Music TTML • Enhanced LRC • AMLL Preview</code>
                   </div>
@@ -407,13 +512,18 @@
                   <div class="project-desc">
                     Android companion app to scan local music files, download synced Apple Music TTML &amp; LRC lyrics in bulk, and preview lyrics on mobile devices.
                   </div>
-                  <div class="nt-client-box" style="font-size: 0.74rem; padding: 8px; margin-top: 6px;">
-                    <code>$ git clone https://github.com/Anik200/mldl-android</code>
-                  </div>
+                  <!-- Screenshot Preview -->
+                  <a href="img/mldl1.webp" data-lightbox="mldl-android-gallery" data-title="mldl Android App Screenshot 1" class="project-preview-wrap">
+                    <img src="img/mldl1.webp" alt="mldl Android Preview" loading="lazy" />
+                    <span class="gallery-overlay-badge"><i class="fa-solid fa-magnifying-glass"></i> Screenshot 1</span>
+                  </a>
                 </div>
                 <div class="nt-btn-row" style="margin-top: 8px;">
                   <a href="https://github.com/Anik200/mldl-android" target="_blank" rel="noopener noreferrer" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
                     <i class="fa-brands fa-github"></i> Repository
+                  </a>
+                  <a href="img/mld2.webp" data-lightbox="mldl-android-gallery" data-title="mldl Android App Screenshot 2" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
+                    <i class="fa-solid fa-images"></i> Screenshots
                   </a>
                   <a href="https://anik200.github.io/mldl/mldl.apk" target="_blank" rel="noopener noreferrer" class="nt-btn" style="font-size: 0.74rem; padding: 4px 8px;">
                     <i class="fa-solid fa-download"></i> Download APK
@@ -450,44 +560,27 @@
               May 2025
             </div>
 
-            <p class="hero-desc">
+            <p class="hero-desc" style="margin-bottom: 16px;">
               I recently went on a cycling trip with a friend — had a huge burst of dopamine throughout the whole ride, pure fun. Cycling has always been my favorite way to clear my head, stay fit, and explore quiet roads. Here are a few snapshots from the ride:
             </p>
 
-            <!-- Accordion Gallery (Strictly Zero Radius Inset 3D) -->
-            <div class="accordion-wrapper">
-              <div class="accordion-content">
-                <div class="expanded-inner">
-                  <div style="font-size: 0.78rem; color: var(--text-dim); margin-bottom: 8px;">
-                    <i class="fa-solid fa-camera"></i> Click to enlarge:
-                  </div>
-                  <div class="photo-gallery-grid">
-                    <a href="./img/image1.jpg" data-lightbox="cycling-gallery" data-title="Cycling route & scenic halt" class="gallery-card">
-                      <img src="./img/image1.jpg" alt="Cycling route 1" loading="lazy" />
-                      <span class="gallery-overlay-badge">01</span>
-                    </a>
-                    <a href="./img/image2.jpg" data-lightbox="cycling-gallery" data-title="Roadside stop & lush greenery" class="gallery-card">
-                      <img src="./img/image2.jpg" alt="Cycling route 2" loading="lazy" />
-                      <span class="gallery-overlay-badge">02</span>
-                    </a>
-                    <a href="./img/image3.jpg" data-lightbox="cycling-gallery" data-title="Bicycle resting spot" class="gallery-card">
-                      <img src="./img/image3.jpg" alt="Cycling route 3" loading="lazy" />
-                      <span class="gallery-overlay-badge">03</span>
-                    </a>
-                    <a href="./img/image4.jpg" data-lightbox="cycling-gallery" data-title="Sunset & scenic landscape" class="gallery-card">
-                      <img src="./img/image4.jpg" alt="Cycling route 4" loading="lazy" />
-                      <span class="gallery-overlay-badge">04</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div style="margin-top: 12px;">
-              <button class="nt-btn" data-type="photos" onclick="togglePostAccordion(this)">
-                <span class="btn-label">View Trip &amp; Photos (4)</span>
-                <i class="fa-solid fa-chevron-down" style="font-size: 0.72rem; margin-left: 4px;"></i>
-              </button>
+            <div class="photo-gallery-grid">
+              <a href="./img/image1.jpg" data-lightbox="cycling-gallery" data-title="Image 1" class="gallery-card">
+                <img src="./img/image1.jpg" alt="Cycling route 1" loading="lazy" />
+                <span class="gallery-overlay-badge">01</span>
+              </a>
+              <a href="./img/image2.jpg" data-lightbox="cycling-gallery" data-title="Image 2" class="gallery-card">
+                <img src="./img/image2.jpg" alt="Cycling route 2" loading="lazy" />
+                <span class="gallery-overlay-badge">02</span>
+              </a>
+              <a href="./img/image3.jpg" data-lightbox="cycling-gallery" data-title="Image 3" class="gallery-card">
+                <img src="./img/image3.jpg" alt="Cycling route 3" loading="lazy" />
+                <span class="gallery-overlay-badge">03</span>
+              </a>
+              <a href="./img/image4.jpg" data-lightbox="cycling-gallery" data-title="Image 4" class="gallery-card">
+                <img src="./img/image4.jpg" alt="Cycling route 4" loading="lazy" />
+                <span class="gallery-overlay-badge">04</span>
+              </a>
             </div>
           </div>
 
