@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Anik Biswas · Student, Linux enthusiast, and C programmer from West Bengal, India." />
-  <title>Anik Biswas · anik.dev</title>
+  <title>Anik Biswas · Portfolio</title>
 
   <!-- Google Fonts: JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,8 +19,27 @@
 
   <!-- Windows NT Monochrome Stylesheet -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Immediate Theme Bootstrap to prevent flash of wrong theme on boot intro -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('anik_theme_pref') || 'dark';
+        var themeClass = (saved === 'dark' || saved === 'light') ? saved : ('theme-' + saved);
+        document.documentElement.classList.add(themeClass);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="dark">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('anik_theme_pref') || 'dark';
+        document.body.className = (saved === 'dark' || saved === 'light') ? saved : ('theme-' + saved);
+      } catch (e) {}
+    })();
+  </script>
   <!-- Glitch Boot Intro Overlay -->
   <div id="site-intro" class="site-intro">
     <div class="intro-content">
@@ -43,13 +62,21 @@
       <a href="#" class="nt-start-btn" title="Anik">anik</a>
 
       <div class="taskbar-tasks">
-        <a href="#about" class="nt-task-item task-home">about</a>
-        <a href="#projects" class="nt-task-item">projects</a>
-        <a href="#blog" class="nt-task-item">posts</a>
-        <a href="#music" class="nt-task-item">music</a>
-        <a href="#steam" class="nt-task-item">steam</a>
-        <a href="#legacy" class="nt-task-item">legacy</a>
-        <a href="#contact" class="nt-task-item">contact</a>
+        <span class="taskbar-spacer" aria-hidden="true"></span>
+        <div class="compass-indicator" id="compassIndicator" aria-hidden="true">
+          <svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.5 1L8 5.5H1L4.5 1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <a href="#about" class="nt-task-item task-home" data-target="about">about<span class="minimized-dot"></span></a>
+        <a href="#projects" class="nt-task-item" data-target="projects">projects<span class="minimized-dot"></span></a>
+        <a href="#blog" class="nt-task-item" data-target="blog">posts<span class="minimized-dot"></span></a>
+        <a href="#music" class="nt-task-item" data-target="music">music<span class="minimized-dot"></span></a>
+        <a href="#steam" class="nt-task-item" data-target="steam">steam<span class="minimized-dot"></span></a>
+        <a href="#minecraft" class="nt-task-item" data-target="minecraft">minecraft<span class="minimized-dot"></span></a>
+        <a href="#legacy" class="nt-task-item" data-target="legacy">legacy<span class="minimized-dot"></span></a>
+        <a href="#contact" class="nt-task-item" data-target="contact">contact<span class="minimized-dot"></span></a>
+        <span class="taskbar-spacer" aria-hidden="true"></span>
       </div>
     </div>
 
@@ -69,9 +96,46 @@
         <i class="fa-solid fa-mug-hot"></i>
       </a>
 
-      <button id="theme-toggle" class="tray-btn" title="Toggle theme (dark/light)" aria-label="Toggle Theme">
-        <i class="fa-solid fa-sun"></i>
-      </button>
+      <div class="theme-dropdown-container">
+        <button id="theme-toggle" class="tray-btn" title="Choose theme" aria-label="Toggle Theme Menu" aria-haspopup="true" aria-expanded="false">
+          <i class="fa-solid fa-palette"></i>
+        </button>
+        <div id="theme-menu" class="theme-menu" role="menu" aria-label="Theme selector">
+          <div class="theme-menu-header">Select Theme</div>
+          <button class="theme-option" data-theme="dark" role="menuitem">
+            <span class="theme-swatch" style="--swatch-color: #020304;"></span>
+            <span class="theme-name">Mono Dark</span>
+            <i class="fa-solid fa-check theme-check"></i>
+          </button>
+          <button class="theme-option" data-theme="light" role="menuitem">
+            <span class="theme-swatch" style="--swatch-color: #ffffff;"></span>
+            <span class="theme-name">Mono Light</span>
+            <i class="fa-solid fa-check theme-check"></i>
+          </button>
+          <div class="theme-menu-divider"></div>
+          <div class="theme-menu-sublabel">Catppuccin</div>
+          <button class="theme-option" data-theme="mocha" role="menuitem">
+            <span class="theme-swatch" style="--swatch-color: #cba6f7;"></span>
+            <span class="theme-name">Mocha</span>
+            <i class="fa-solid fa-check theme-check"></i>
+          </button>
+          <button class="theme-option" data-theme="macchiato" role="menuitem">
+            <span class="theme-swatch" style="--swatch-color: #8aadf4;"></span>
+            <span class="theme-name">Macchiato</span>
+            <i class="fa-solid fa-check theme-check"></i>
+          </button>
+          <button class="theme-option" data-theme="frappe" role="menuitem">
+            <span class="theme-swatch" style="--swatch-color: #85c1dc;"></span>
+            <span class="theme-name">Frappé</span>
+            <i class="fa-solid fa-check theme-check"></i>
+          </button>
+          <button class="theme-option" data-theme="latte" role="menuitem">
+            <span class="theme-swatch" style="--swatch-color: #1e66f5;"></span>
+            <span class="theme-name">Latte</span>
+            <i class="fa-solid fa-check theme-check"></i>
+          </button>
+        </div>
+      </div>
 
       <span id="tray-clock">--:-- --</span>
     </div>
@@ -86,11 +150,6 @@
           <i class="fa-solid fa-terminal nt-titlebar-icon"></i>
           <span>anik@arch: ~</span>
         </div>
-        <div class="nt-titlebar-controls">
-          <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
-          <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
-          <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
-        </div>
       </div>
 
       <div class="nt-menubar">
@@ -101,13 +160,20 @@
       </div>
 
       <div class="nt-window-content">
-        <div class="hero-tag">
-          arch linux · hyprland · i3wm
-        </div>
-        <div class="hero-type-row">
-          <span class="hero-prompt">&gt;</span>
-          <h1 id="typed-heading">Anik Biswas</h1>
-          <span class="cursor-caret">_</span>
+        <div class="hero-header-row">
+          <div class="hero-avatar-wrap">
+            <img src="img/avatar.png" alt="Anik Biswas" class="hero-avatar-img" />
+          </div>
+          <div class="hero-header-text">
+            <div class="hero-tag">
+              arch linux · hyprland · i3wm
+            </div>
+            <div class="hero-type-row">
+              <span class="hero-prompt">&gt;</span>
+              <h1 id="typed-heading">Anik Biswas</h1>
+              <span class="cursor-caret">_</span>
+            </div>
+          </div>
         </div>
 
         <p class="hero-desc">
@@ -154,7 +220,6 @@
             </div>
             <div class="nt-titlebar-controls">
               <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
-              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
               <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
             </div>
           </div>
@@ -198,7 +263,6 @@
             </div>
             <div class="nt-titlebar-controls">
               <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
-              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
               <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
             </div>
           </div>
@@ -377,7 +441,6 @@
             </div>
             <div class="nt-titlebar-controls">
               <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
-              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
               <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
             </div>
           </div>
@@ -443,7 +506,6 @@
             </div>
             <div class="nt-titlebar-controls">
               <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
-              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
               <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
             </div>
           </div>
@@ -515,7 +577,6 @@
             </div>
             <div class="nt-titlebar-controls">
               <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
-              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
               <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
             </div>
           </div>
@@ -544,7 +605,6 @@
             </div>
             <div class="nt-titlebar-controls">
               <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
-              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
               <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
             </div>
           </div>
@@ -610,7 +670,6 @@
             </div>
             <div class="nt-titlebar-controls">
               <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
-              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
               <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
             </div>
           </div>
@@ -627,7 +686,7 @@
             <div class="nt-client-box steam-profile-box">
               <div class="steam-header-row">
                 <a href="https://steamcommunity.com/id/myh3/" target="_blank" rel="noopener noreferrer" class="steam-avatar-wrap" title="View Steam Avatar">
-                  <img src="https://avatars.fastly.steamstatic.com/d613a7f596ab84b19eef68cef0b785b59195ca20.jpg" alt="Steam avatar" />
+                  <img src="img/avatar.png" alt="Steam avatar" />
                 </a>
 
                 <div class="steam-user-meta">
@@ -704,6 +763,135 @@
           </div>
         </article>
       </section>
+ 
+<!-- Minecraft Profile Window -->
+      <section id="minecraft">
+        <article class="nt-window">
+          <div class="nt-titlebar">
+            <div class="nt-titlebar-left">
+              <i class="fa-solid fa-cube nt-titlebar-icon"></i>
+              <span>minecraft.exe</span>
+            </div>
+            <div class="nt-titlebar-controls">
+              <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
+              <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
+            </div>
+          </div>
+          <div class="nt-menubar">
+            <span>Player</span>
+            <span>Skin</span>
+            <span>Capes</span>
+            <span>Server</span>
+            <span>Help</span>
+          </div>
+          <div class="nt-window-content">
+            <div class="nt-client-box mc-profile-box">
+              <!-- Header Row: Player Head Avatar + Identity -->
+              <div class="mc-header-row">
+                <a href="https://namemc.com/profile/Myh3.1" target="_blank" rel="noopener noreferrer" class="mc-avatar-wrap" title="View Myh3 on NameMC">
+                  <img src="img/avatar_myh3.png" alt="Myh3 Player Head" class="mc-avatar-img" />
+                </a>
+
+                <div class="mc-user-meta">
+                  <div class="mc-name-row">
+                    <span class="mc-persona-name">Myh3</span>
+                  </div>
+                  <div class="mc-sub-line">
+                    <span>Playing minecraft since i was 9, broken so many blocks and placed even more.</span>
+                  </div>
+                  <div class="mc-uuid-code">
+                    <code>59b82f6d-1558-446a-8bf3-566cf29dc74c</code>
+                  </div>
+                </div>
+              </div>
+              <div class="mc-server-bar">
+                <div class="mc-server-info">
+                  <i class="fa-solid fa-server mc-server-icon"></i>
+                  <code class="mc-server-ip">mc.redpilllabs.in</code>
+                  <button class="nt-btn mc-copy-btn" onclick="copyEmail('mc.redpilllabs.in', event)" title="Copy Server IP">
+                    <i class="fa-regular fa-copy"></i> Copy IP
+                  </button>
+                </div>
+                <a href="https://discord.gg/QArCnCBKXp" target="_blank" rel="noopener noreferrer" class="mc-server-discord-btn" title="Join Server Discord">
+                  <i class="fa-brands fa-discord"></i> Discord
+                </a>
+              </div>
+
+              <!-- Owned Capes Collection -->
+              <div class="mc-capes-section">
+                <div class="mc-section-heading">
+                  <span><i class="fa-solid fa-shield-halved"></i> Owned Capes (15)</span>
+                  <span class="mc-cape-hover-hint" id="mcCapeHoverName"></span>
+                </div>
+                <div class="mc-capes-grid">
+                  <div class="mc-cape-item" data-name="Twisted" title="Twisted">
+                    <img src="img/capes/twisted_front.png" alt="Twisted" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Aurora" title="Aurora">
+                    <img src="img/capes/aurora_front.png" alt="Aurora" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="MCC 15th Year" title="MCC 15th Year">
+                    <img src="img/capes/mcc_front.png" alt="MCC 15th Year" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Builder" title="Builder">
+                    <img src="img/capes/builder_front.png" alt="Builder" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Yearn" title="Yearn">
+                    <img src="img/capes/yearn_front.png" alt="Yearn" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Mojang Office" title="Mojang Office">
+                    <img src="img/capes/mojang-office_front.png" alt="Mojang Office" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Home" title="Home">
+                    <img src="img/capes/home_front.png" alt="Home" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Copper" title="Copper">
+                    <img src="img/capes/copper_front.png" alt="Copper" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Menace" title="Menace">
+                    <img src="img/capes/menace_front.png" alt="Menace" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Follower's (TikTok)" title="Follower's (TikTok)">
+                    <img src="img/capes/followers_front.png" alt="Follower's (TikTok)" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Purple Heart (Twitch)" title="Purple Heart (Twitch)">
+                    <img src="img/capes/purple-heart_front.png" alt="Purple Heart (Twitch)" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Common" title="Common">
+                    <img src="img/capes/common_front.png" alt="Common" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="15th Anniversary" title="15th Anniversary">
+                    <img src="img/capes/15th-anniversary_front.png" alt="15th Anniversary" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Pan (Pancake)" title="Pan (Pancake)">
+                    <img src="img/capes/pan_front.png" alt="Pan (Pancake)" class="mc-cape-art" />
+                  </div>
+                  <div class="mc-cape-item" data-name="Migrator" title="Migrator">
+                    <img src="img/capes/migrator_front.png" alt="Migrator" class="mc-cape-art" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="nt-btn-row" style="margin-top: 14px;">
+              <a href="https://namemc.com/profile/Myh3.1" target="_blank" rel="noopener noreferrer" class="nt-btn">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open NameMC Profile
+              </a>
+              <a href="img/skin_myh3.png" target="_blank" class="nt-btn" download="Myh3_Skin.png">
+                <i class="fa-solid fa-download"></i> Download Skin
+              </a>
+              <a href="img/cape_myh3.png" target="_blank" class="nt-btn" download="Myh3_Cape.png">
+                <i class="fa-solid fa-shield-halved"></i> Download Cape
+              </a>
+            </div>
+          </div>
+          <div class="nt-statusbar">
+            <div class="nt-status-panel flex-fill">player: Myh3 · member since 2015</div>
+            <div class="nt-status-panel">server: mc.redpilllabs.in</div>
+            <div class="nt-status-panel">capes: 15 owned</div>
+          </div>
+        </article>
+      </section>
 
       <!-- Legacy View Window -->
       <section id="legacy">
@@ -715,7 +903,6 @@
             </div>
             <div class="nt-titlebar-controls">
               <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
-              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
               <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
             </div>
           </div>
@@ -767,7 +954,6 @@
             </div>
             <div class="nt-titlebar-controls">
               <button class="nt-win-btn" onclick="minimizeWindow(this)" title="Minimize">_</button>
-              <button class="nt-win-btn" onclick="toggleMaximizeWindow(this)" title="Maximize">□</button>
               <button class="nt-win-btn" onclick="closeWindow(this)" title="Close">×</button>
             </div>
           </div>
@@ -840,12 +1026,12 @@
   <!-- Retro Dialog Box Toast -->
   <div id="copy-toast"></div>
 
-  <!-- Ambient Rain & Lightning Audio Elements -->
+  <!-- Ambient Rain Audio Element -->
   <audio id="ambient-rain" src="audio/rain.mp3" loop preload="auto"></audio>
-  <audio id="ambient-thunder" src="audio/thunder.mp3" preload="auto"></audio>
 
   <!-- Lightbox2 (with jQuery bundled) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
+
 
   <!-- Application Logic -->
   <script src="script.js"></script>
