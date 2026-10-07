@@ -1333,21 +1333,148 @@
   };
 
   // -------------------------------------------------------------------------
-  // 9. Interactive Lossless Music Player Simulation
+  // 9. Live Navidrome / Last.fm Music Player Integration
   // -------------------------------------------------------------------------
   const equalizer = document.getElementById('audio-equalizer');
-  const vinylRecord = document.getElementById('music-vinyl');
-  let isMusicPlaying = true;
+  const musicCover = document.getElementById('music-cover');
+  const musicTitle = document.getElementById('music-title');
+  const musicArtist = document.getElementById('music-artist');
+  const musicAlbum = document.getElementById('music-album');
+  const musicAlbumRow = document.getElementById('music-album-row');
+  const musicStatusBadge = document.getElementById('music-status-badge');
+  const musicTimestamp = document.getElementById('music-timestamp');
+  const musicStatusBar = document.getElementById('music-statusbar');
 
-  if (vinylRecord) {
-    vinylRecord.setAttribute('title', 'Daft Punk - Random Access Memories (Click to pause/play)');
-    vinylRecord.addEventListener('click', () => {
-      isMusicPlaying = !isMusicPlaying;
-      if (equalizer) equalizer.style.opacity = isMusicPlaying ? '1' : '0.2';
-      if (isMusicPlaying) vinylRecord.classList.remove('paused');
-      else vinylRecord.classList.add('paused');
+  let userManualPause = false;
+
+  const albumWrap = document.querySelector('.music-album-art-wrap');
+  if (albumWrap) {
+    albumWrap.style.cursor = 'pointer';
+    albumWrap.setAttribute('title', 'Click to toggle equalizer animation');
+    albumWrap.addEventListener('click', () => {
+      userManualPause = !userManualPause;
+      if (equalizer) {
+        equalizer.style.opacity = userManualPause ? '0.2' : '1';
+      }
     });
   }
+
+  function formatRelativeTime(timestampSec) {
+    if (!timestampSec) return '';
+    const now = Math.floor(Date.now() / 1000);
+    const diff = now - timestampSec;
+    if (diff < 60) return 'just now';
+    if (diff < 3600) {
+      const mins = Math.floor(diff / 60);
+      return `${mins}m ago`;
+    }
+    if (diff < 86400) {
+      const hours = Math.floor(diff / 3600);
+      return `${hours}h ago`;
+    }
+    const d = new Date(timestampSec * 1000);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  async function updateNowPlaying() {
+    const username = 'Myhem01';
+    const apiKey = '1e7c0b98069fac903dfa88d04e41d1b0';
+    const endpoint = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=1`;
+
+    try {
+      const res = await fetch(endpoint);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      const tracks = data?.recenttracks?.track;
+      if (!tracks || tracks.length === 0) {
+        if (musicStatusBadge) {
+          musicStatusBadge.innerHTML = '<i class="fa-solid fa-moon"></i> Library Idle';
+          musicStatusBadge.style.color = 'var(--text-dim)';
+        }
+        if (musicStatusBar) {
+          musicStatusBar.textContent = 'music: idle / waiting for plays';
+        }
+        if (musicTimestamp) {
+          musicTimestamp.textContent = 'Navidrome online · ready to stream';
+        }
+        if (equalizer) equalizer.style.opacity = '0.2';
+        return;
+      }
+
+      const track = Array.isArray(tracks) ? tracks[0] : tracks;
+      const isNowPlaying = track['@attr'] && track['@attr'].nowplaying === 'true';
+      const name = track.name || 'Unknown Track';
+      const artist = track.artist?.['#text'] || track.artist?.name || 'Unknown Artist';
+      const album = track.album?.['#text'] || '';
+      
+      // Album Art
+      const images = track.image || [];
+      const bestImg = images.find(img => img.size === 'large' || img.size === 'extralarge') || images[images.length - 1];
+      const imgUrl = bestImg?.['#text'];
+
+      if (musicTitle) musicTitle.textContent = name;
+      if (musicArtist) musicArtist.textContent = artist;
+      
+      if (musicAlbum) {
+        if (album && album.trim() !== '') {
+          musicAlbum.textContent = album;
+          if (musicAlbumRow) musicAlbumRow.style.display = 'flex';
+        } else if (musicAlbumRow) {
+          musicAlbumRow.style.display = 'none';
+        }
+      }
+      
+      if (musicCover && imgUrl && imgUrl.trim() !== '') {
+        musicCover.src = imgUrl;
+      }
+
+      if (isNowPlaying) {
+        if (musicStatusBadge) {
+          musicStatusBadge.innerHTML = '<i class="fa-solid fa-circle-play" style="color: #22c55e;"></i> Listening right now';
+          musicStatusBadge.style.color = '#22c55e';
+        }
+        if (musicTimestamp) {
+          musicTimestamp.innerHTML = '<span style="color: #22c55e;">● Live stream</span> · bit-perfect';
+        }
+        if (musicStatusBar) {
+          musicStatusBar.textContent = `now playing: ${name.toLowerCase()} - ${artist.toLowerCase()}`;
+        }
+        if (!userManualPause && equalizer) {
+          equalizer.style.opacity = '1';
+        }
+      } else {
+        const timeSec = track.date?.uts ? parseInt(track.date.uts, 10) : null;
+        const timeStr = timeSec ? formatRelativeTime(timeSec) : 'recently';
+        const exactDate = timeSec ? new Date(timeSec * 1000).toLocaleString() : '';
+
+        if (musicStatusBadge) {
+          musicStatusBadge.innerHTML = '<i class="fa-solid fa-clock-rotate-left"></i> Last listened to';
+          musicStatusBadge.style.color = 'var(--text-sub)';
+        }
+        if (musicTimestamp) {
+          musicTimestamp.textContent = `Played ${timeStr} · ${exactDate}`;
+          musicTimestamp.title = exactDate;
+        }
+        if (musicStatusBar) {
+          musicStatusBar.textContent = `last played: ${name.toLowerCase()} - ${artist.toLowerCase()}`;
+        }
+        if (!userManualPause && equalizer) {
+          equalizer.style.opacity = '0.25';
+        }
+      }
+    } catch (err) {
+      console.warn('Could not fetch Last.fm status:', err);
+      if (musicStatusBadge) {
+        musicStatusBadge.innerHTML = '<i class="fa-solid fa-compact-disc"></i> Offline';
+        musicStatusBadge.style.color = 'var(--text-dim)';
+      }
+    }
+  }
+
+  // Initial fetch and poll every 20 seconds
+  updateNowPlaying();
+  setInterval(updateNowPlaying, 20000);
 
   // -------------------------------------------------------------------------
   // 10. Legacy View Frame Toggle

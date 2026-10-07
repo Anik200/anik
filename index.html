@@ -610,27 +610,57 @@
             </div>
 
             <p class="hero-desc">
-              I like to keep my music library stored offline locally instead of streaming from Spotify or Apple Music. I use <strong>Seeker</strong> (Soulseek network) to grab lossless FLAC albums and play them bit-perfect through <a href="https://symfonium.app/" target="_blank" rel="noopener noreferrer" style="color: var(--text-main); font-weight: bold; text-decoration: underline;">Symfonium</a>.
+              I like to keep my music library stored offline locally instead of streaming from Spotify or Apple Music. I use <strong>Seeker</strong> (Soulseek network) to grab lossless FLAC albums and play them bit-perfect through <a href="https://symfonium.app/" target="_blank" rel="noopener noreferrer" style="color: var(--text-main); font-weight: bold; text-decoration: underline;">Symfonium</a>, And on Desktop I use my web music player to grab songs from navidrome and listen to them. Here is my recently listened song below :
             </p>
 
-            <!-- Spinning Vinyl Now Playing Player Bar -->
-            <div class="music-player-bar">
-              <div class="music-vinyl-wrap" title="Daft Punk - Random Access Memories Vinyl">
-                <div class="spinning-vinyl" id="music-vinyl">
-                  <img src="img/ram_album.png" alt="Daft Punk - Random Access Memories Album Art" class="vinyl-album-art" />
-                  <div class="vinyl-center-hole"></div>
+            <!-- Music Now Playing Modern Card -->
+            <div class="music-card-widget">
+              <div class="music-card-top">
+                <div class="music-album-art-wrap">
+                  <img id="music-cover" src="img/ram_album.png" alt="Album Cover" class="music-album-art" />
+                  <div class="music-art-overlay">
+                    <i class="fa-solid fa-compact-disc"></i>
+                  </div>
+                </div>
+
+                <div class="music-meta-col">
+                  <div class="music-meta-header">
+                    <span class="music-status-badge" id="music-status-badge">
+                      <i class="fa-solid fa-circle-notch fa-spin"></i> Checking player...
+                    </span>
+                    <div class="audio-equalizer" id="audio-equalizer" title="Lossless Audio Waveform">
+                      <span class="audio-bar"></span>
+                      <span class="audio-bar"></span>
+                      <span class="audio-bar"></span>
+                      <span class="audio-bar"></span>
+                      <span class="audio-bar"></span>
+                    </div>
+                  </div>
+
+                  <h3 class="music-track-name" id="music-title">Random Access Memories</h3>
+                  
+                  <div class="music-meta-details">
+                    <div class="music-detail-row">
+                      <i class="fa-solid fa-user-ninja"></i>
+                      <span class="music-detail-text" id="music-artist">Daft Punk</span>
+                    </div>
+                    <div class="music-detail-row" id="music-album-row">
+                      <i class="fa-solid fa-record-vinyl"></i>
+                      <span class="music-detail-text" id="music-album">Random Access Memories</span>
+                    </div>
+                    <div class="music-detail-row">
+                      <i class="fa-regular fa-clock"></i>
+                      <span class="music-detail-text" id="music-timestamp">Lossless FLAC · bit-perfect</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="music-info">
-                <div class="music-title">Random Access Memories</div>
-                <div class="music-artist">Daft Punk · 24-bit Lossless FLAC</div>
-              </div>
-              <div class="audio-equalizer" id="audio-equalizer" title="Lossless Audio Waveform">
-                <span class="audio-bar"></span>
-                <span class="audio-bar"></span>
-                <span class="audio-bar"></span>
-                <span class="audio-bar"></span>
-                <span class="audio-bar"></span>
+
+              <!-- Compact Source & Stream Specs Footer -->
+              <div class="music-card-footer">
+                <span class="music-spec-chip"><i class="fa-solid fa-server"></i> Navidrome</span>
+                <span class="music-spec-chip"><i class="fa-solid fa-play"></i> Anik's music player</span>
+                <span class="music-spec-chip"><i class="fa-solid fa-sliders"></i> Bit-Perfect FLAC</span>
               </div>
             </div>
 
@@ -639,7 +669,8 @@
               <div style="font-weight: bold; margin-bottom: 6px; color: var(--text-main);"><i class="fa-solid fa-headphones"></i> Audio Gear &amp; Hardware:</div>
               <div><strong style="color: var(--text-main);">In-Ear Monitor:</strong> Tangzu Wan'er S.G 2</div>
               <div><strong style="color: var(--text-main);">DAC:</strong> Audiocular Spark (Hi-Res Type-C DAC)</div>
-              <div><strong style="color: var(--text-main);">Music Player:</strong> <a href="https://symfonium.app/" target="_blank" rel="noopener noreferrer" style="color: var(--text-main); text-decoration: underline;">Symfonium</a> (Bit-perfect Android player)</div>
+              <div><strong style="color: var(--text-main);">Music Player:</strong> Anik's music player / <a href="https://symfonium.app/" target="_blank" rel="noopener noreferrer" style="color: var(--text-main); text-decoration: underline;">Symfonium</a></div>
+              <div><strong style="color: var(--text-main);">Server:</strong> Navidrome (Self-hosted on Arch Linux)</div>
               <div><strong style="color: var(--text-main);">Library:</strong> 24-bit Lossless FLAC via Seeker (Soulseek)</div>
             </div>
 
@@ -647,6 +678,7 @@
               <a href="https://symfonium.app/" target="_blank" rel="noopener noreferrer" class="tech-tag" style="text-decoration: none;">
                 <i class="fa-solid fa-play"></i> Symfonium
               </a>
+              <span class="tech-tag"><i class="fa-solid fa-server"></i> Navidrome</span>
               <span class="tech-tag"><i class="fa-solid fa-headphones"></i> Tangzu Wan'er S.G 2</span>
               <span class="tech-tag"><i class="fa-solid fa-bolt"></i> Audiocular Spark</span>
               <span class="tech-tag"><i class="fa-solid fa-file-audio"></i> 24-bit FLAC</span>
@@ -656,9 +688,9 @@
           </div>
 
           <div class="nt-statusbar">
-            <div class="nt-status-panel flex-fill">now playing: daft punk - random access memories</div>
+            <div class="nt-status-panel flex-fill" id="music-statusbar">now playing: checking...</div>
             <div class="nt-status-panel">dac: audiocular spark</div>
-            <div class="nt-status-panel">player: symfonium</div>
+            <div class="nt-status-panel">server: navidrome</div>
           </div>
         </article>
 
