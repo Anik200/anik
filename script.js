@@ -1376,18 +1376,210 @@
     return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
 
-  async function updateNowPlaying() {
-    const username = 'Myhem01';
-    const apiKey = '1e7c0b98069fac903dfa88d04e41d1b0';
-    const endpoint = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=1`;
+  // Progress bar elements
+  const progressContainer = document.getElementById('music-progress-container');
+  const progressFill = document.getElementById('music-progress-fill');
+  const timeCurrentEl = document.getElementById('music-time-current');
+  const timeDurationEl = document.getElementById('music-time-duration');
+
+  let activeTrackKey = null;
+  let activeDurationSec = 0;
+  let activeBaseTimeSec = 0;
+  let activeReportTimestamp = 0;
+  let isCurrentlyPlaying = false;
+  let progressInterval = null;
+  const artCache = {};
+  const durationCache = {};
+
+  function formatTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) return '0:00';
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  }
+
+  async function fetchLastFmTrackInfo(artist, trackName) {
+    const key = `${artist.toLowerCase()}|${trackName.toLowerCase()}`;
+    if (artCache[key] && durationCache[key]) return { image: artCache[key], duration: durationCache[key] };
 
     try {
-      const res = await fetch(endpoint);
+      const apiKey = '1e7c0b98069fac903dfa88d04e41d1b0';
+      const url = `https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${apiKey}&artist=${encodeURIComponent(artist)}&track=${encodeURIComponent(trackName)}&format=json`;
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      const data = await res.json();
+      const track = data?.track;
+      if (!track) return null;
+
+      const dur = parseInt(track.duration, 10);
+      if (dur && dur > 0) {
+        durationCache[key] = Math.floor(dur / 1000);
+      }
+
+      const images = track.album?.image || track.image || [];
+      const bestImg = images.find(img => img.size === 'extralarge' || img.size === 'large') || images[images.length - 1];
+      const imgUrl = bestImg?.['#text'];
+      if (imgUrl) {
+        artCache[key] = imgUrl;
+      }
+
+      return { image: artCache[key], duration: durationCache[key] };
+    } catch (e) {
+      console.warn('Could not fetch Last.fm info:', e);
+    }
+    return null;
+  }
+
+  function renderProgress(curSec, durSec) {
+    if (!progressContainer) return;
+    progressContainer.style.display = 'flex';
+    if (timeDurationEl) timeDurationEl.textContent = formatTime(durSec);
+    const clampedCur = Math.min(durSec, Math.max(0, curSec));
+    if (timeCurrentEl) timeCurrentEl.textContent = formatTime(Math.floor(clampedCur));
+    const pct = durSec > 0 ? Math.min(100, Math.max(0, (clampedCur / durSec) * 100)) : 0;
+    if (progressFill) progressFill.style.width = `${pct}%`;
+  }
+
+  function startLiveProgressTicker(baseSec, durSec, reportTs) {
+    if (progressInterval) clearInterval(progressInterval);
+    activeBaseTimeSec = baseSec;
+    activeDurationSec = durSec;
+    activeReportTimestamp = reportTs;
+    isCurrentlyPlaying = true;
+
+    function tick() {
+      if (!isCurrentlyPlaying) return;
+      const elapsed = (Date.now() - activeReportTimestamp) / 1000;
+      const cur = activeBaseTimeSec + elapsed;
+      renderProgress(cur, activeDurationSec);
+      if (activeDurationSec > 0 && cur >= activeDurationSec + 3) {
+        clearInterval(progressInterval);
+      }
+    }
+
+    tick();
+    progressInterval = setInterval(tick, 1000);
+  }
+
+  function freezeProgress(frozenSec, durSec) {
+    if (progressInterval) {
+      clearInterval(progressInterval);
+      progressInterval = null;
+    }
+    isCurrentlyPlaying = false;
+    activeBaseTimeSec = frozenSec;
+    activeDurationSec = durSec;
+    renderProgress(frozenSec, durSec);
+  }
+
+  function hideProgress() {
+    if (progressInterval) {
+      clearInterval(progressInterval);
+      progressInterval = null;
+    }
+    isCurrentlyPlaying = false;
+    activeTrackKey = null;
+    if (progressContainer) progressContainer.style.display = 'none';
+  }
+
+  function applyLivePlaybackState(data) {
+    const track = data.track || {};
+    const title = track.title || track.name || 'Unknown Track';
+    const artist = track.artist || track.artistName || 'Unknown Artist';
+    const album = track.album || track.albumName || '';
+    const trackKey = `${artist}|${title}`;
+    const isPlaying = Boolean(data.isPlaying);
+    const currentTime = typeof data.currentTime === 'number' ? data.currentTime : 0;
+    const duration = typeof data.duration === 'number' ? data.duration : (typeof track.duration === 'number' ? track.duration : 0);
+    const ts = data.timestamp || Date.now();
+
+    if (musicTitle) musicTitle.textContent = title;
+    if (musicArtist) musicArtist.textContent = artist;
+
+    if (musicAlbum) {
+      if (album && album.trim() !== '') {
+        musicAlbum.textContent = album;
+        if (musicAlbumRow) musicAlbumRow.style.display = 'flex';
+      } else if (musicAlbumRow) {
+        musicAlbumRow.style.display = 'none';
+      }
+    }
+
+    // High-resolution album artwork (cached or fetched from Last.fm)
+    const cachedArt = artCache[trackKey.toLowerCase()];
+    if (cachedArt && musicCover) {
+      musicCover.src = cachedArt;
+    } else {
+      fetchLastFmTrackInfo(artist, title).then(info => {
+        if (info?.image && musicCover) {
+          musicCover.src = info.image;
+        }
+      });
+    }
+
+    // Live play vs pause states
+    if (isPlaying) {
+      if (musicStatusBadge) {
+        musicStatusBadge.innerHTML = '<i class="fa-solid fa-circle-play"></i> Listening right now';
+        musicStatusBadge.style.color = 'var(--text-main)';
+      }
+      if (musicTimestamp) {
+        musicTimestamp.textContent = "Live stream · Anik's music player";
+      }
+      if (musicStatusBar) {
+        musicStatusBar.textContent = `now playing: ${title.toLowerCase()} - ${artist.toLowerCase()}`;
+      }
+      if (!userManualPause && equalizer) {
+        equalizer.style.opacity = '1';
+        equalizer.classList.remove('paused');
+      }
+
+      if (duration > 0) {
+        if (activeTrackKey !== trackKey || !isCurrentlyPlaying || Math.abs(currentTime - activeBaseTimeSec) > 3) {
+          activeTrackKey = trackKey;
+          startLiveProgressTicker(currentTime, duration, ts);
+        }
+      } else {
+        hideProgress();
+      }
+    } else {
+      // PAUSED STATE
+      if (musicStatusBadge) {
+        musicStatusBadge.innerHTML = '<i class="fa-solid fa-circle-pause"></i> Paused';
+        musicStatusBadge.style.color = 'var(--text-sub)';
+      }
+      if (musicTimestamp) {
+        musicTimestamp.textContent = 'Playback paused';
+      }
+      if (musicStatusBar) {
+        musicStatusBar.textContent = `paused: ${title.toLowerCase()} - ${artist.toLowerCase()}`;
+      }
+      if (!userManualPause && equalizer) {
+        equalizer.style.opacity = '0.25';
+        equalizer.classList.add('paused');
+      }
+
+      if (duration > 0) {
+        activeTrackKey = trackKey;
+        freezeProgress(currentTime, duration);
+      } else {
+        hideProgress();
+      }
+    }
+  }
+
+  async function fetchLastFmFallback() {
+    const username = 'Myhem01';
+    const apiKey = '1e7c0b98069fac903dfa88d04e41d1b0';
+    const endpoint = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=1&_t=${Date.now()}`;
+
+    try {
+      const res = await fetch(endpoint, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-
       const tracks = data?.recenttracks?.track;
       if (!tracks || tracks.length === 0) {
+        hideProgress();
         if (musicStatusBadge) {
           musicStatusBadge.innerHTML = '<i class="fa-solid fa-moon"></i> Library Idle';
           musicStatusBadge.style.color = 'var(--text-dim)';
@@ -1396,7 +1588,7 @@
           musicStatusBar.textContent = 'music: idle / waiting for plays';
         }
         if (musicTimestamp) {
-          musicTimestamp.textContent = 'Navidrome online · ready to stream';
+          musicTimestamp.textContent = "Anik's music player · ready";
         }
         if (equalizer) equalizer.style.opacity = '0.2';
         return;
@@ -1407,15 +1599,15 @@
       const name = track.name || 'Unknown Track';
       const artist = track.artist?.['#text'] || track.artist?.name || 'Unknown Artist';
       const album = track.album?.['#text'] || '';
-      
-      // Album Art
+      const trackKey = `${artist}|${name}`;
+
       const images = track.image || [];
       const bestImg = images.find(img => img.size === 'large' || img.size === 'extralarge') || images[images.length - 1];
       const imgUrl = bestImg?.['#text'];
 
       if (musicTitle) musicTitle.textContent = name;
       if (musicArtist) musicArtist.textContent = artist;
-      
+
       if (musicAlbum) {
         if (album && album.trim() !== '') {
           musicAlbum.textContent = album;
@@ -1424,27 +1616,42 @@
           musicAlbumRow.style.display = 'none';
         }
       }
-      
+
       if (musicCover && imgUrl && imgUrl.trim() !== '') {
         musicCover.src = imgUrl;
+        artCache[trackKey.toLowerCase()] = imgUrl;
       }
+
+      const timeSec = track.date?.uts ? parseInt(track.date.uts, 10) : null;
 
       if (isNowPlaying) {
         if (musicStatusBadge) {
-          musicStatusBadge.innerHTML = '<i class="fa-solid fa-circle-play" style="color: #22c55e;"></i> Listening right now';
-          musicStatusBadge.style.color = '#22c55e';
+          musicStatusBadge.innerHTML = '<i class="fa-solid fa-circle-play"></i> Listening right now';
+          musicStatusBadge.style.color = 'var(--text-main)';
         }
         if (musicTimestamp) {
-          musicTimestamp.innerHTML = '<span style="color: #22c55e;">● Live stream</span> · bit-perfect';
+          musicTimestamp.textContent = "Live stream · Anik's music player";
         }
         if (musicStatusBar) {
           musicStatusBar.textContent = `now playing: ${name.toLowerCase()} - ${artist.toLowerCase()}`;
         }
         if (!userManualPause && equalizer) {
           equalizer.style.opacity = '1';
+          equalizer.classList.remove('paused');
+        }
+
+        const info = await fetchLastFmTrackInfo(artist, name);
+        if (info?.duration && info.duration > 0) {
+          if (activeTrackKey !== trackKey) {
+            activeTrackKey = trackKey;
+            startLiveProgressTicker(0, info.duration, Date.now());
+          }
+        } else {
+          hideProgress();
         }
       } else {
-        const timeSec = track.date?.uts ? parseInt(track.date.uts, 10) : null;
+        // Completed / Scrobble History -> Idle
+        hideProgress();
         const timeStr = timeSec ? formatRelativeTime(timeSec) : 'recently';
         const exactDate = timeSec ? new Date(timeSec * 1000).toLocaleString() : '';
 
@@ -1461,10 +1668,11 @@
         }
         if (!userManualPause && equalizer) {
           equalizer.style.opacity = '0.25';
+          equalizer.classList.add('paused');
         }
       }
     } catch (err) {
-      console.warn('Could not fetch Last.fm status:', err);
+      console.warn('Could not fetch Last.fm fallback:', err);
       if (musicStatusBadge) {
         musicStatusBadge.innerHTML = '<i class="fa-solid fa-compact-disc"></i> Offline';
         musicStatusBadge.style.color = 'var(--text-dim)';
@@ -1472,9 +1680,43 @@
     }
   }
 
-  // Initial fetch and poll every 20 seconds
+  async function updateNowPlaying() {
+    // 1. Fetch ultra-accurate live state from Anik's player API
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000);
+      const liveRes = await fetch(`https://anik1.redpilllabs.in/api/live-status?_t=${Date.now()}`, {
+        cache: 'no-store',
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if (liveRes.ok) {
+        const liveData = await liveRes.json();
+        if (liveData && liveData.hasActivePlayback && liveData.track) {
+          applyLivePlaybackState(liveData);
+          return;
+        }
+      }
+    } catch (e) {
+      // Live endpoint offline or unreachable -> continue to Last.fm fallback
+    }
+
+    // 2. Fallback to Last.fm recent tracks
+    await fetchLastFmFallback();
+  }
+
+  // Initial fetch and poll every 2 seconds for instant updates
   updateNowPlaying();
-  setInterval(updateNowPlaying, 20000);
+  setInterval(updateNowPlaying, 2000);
+
+  // Trigger immediate update when switching back to the window or tab
+  window.addEventListener('focus', updateNowPlaying);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      updateNowPlaying();
+    }
+  });
 
   // -------------------------------------------------------------------------
   // 10. Legacy View Frame Toggle

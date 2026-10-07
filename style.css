@@ -1577,6 +1577,45 @@ body.light #typed-heading .glitch-char.scrambling {
   text-overflow: ellipsis;
 }
 
+/* Discord RPC Style Progress Bar */
+.music-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.music-progress-bar-bg {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.music-progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--text-main);
+  border-radius: 2px;
+  transition: width 0.3s linear;
+}
+
+.music-progress-times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+body.light .music-progress-bar-bg,
+body.theme-latte .music-progress-bar-bg {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 .music-card-footer {
   display: flex;
   flex-wrap: wrap;
@@ -1632,6 +1671,11 @@ body.theme-latte .music-spec-chip {
   align-items: flex-end;
   gap: 3px;
   height: 22px;
+}
+
+.audio-equalizer.paused .audio-bar {
+  animation-play-state: paused;
+  height: 25% !important;
 }
 
 .audio-bar {
